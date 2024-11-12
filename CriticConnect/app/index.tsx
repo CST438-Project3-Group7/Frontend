@@ -1,6 +1,9 @@
 import React from 'react';
 import { Redirect } from 'expo-router';
-const index=()=>{
-  return <Redirect href="/home" />;
+import RootLayout from './(tabs)/_layout';
+
+export default function Index() {
+  return (
+      <Redirect href="/home" />
+  );
 }
-export default index;
