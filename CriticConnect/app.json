@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "CriticConnect",
-    "slug": "CriticConnect",
+    "slug": "criticconnect",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -12,8 +12,12 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "plugins": [
+      "@react-native-google-signin/google-signin",
+    ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.CriticConnect"
     },
     "android": {
       "adaptiveIcon": {
@@ -33,6 +37,16 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "081acb92-42df-4f1b-a07b-d7507ecaefa0"
+      }
+    },
+    "scheme": "myapp",
+    "owner": "cris_905"
   }
 }
