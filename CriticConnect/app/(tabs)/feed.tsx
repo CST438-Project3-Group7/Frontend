@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Picker } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import WebNavBar from './WebNavBar';
 import moment from 'moment';
 
 const initialPosts = [
@@ -46,6 +47,7 @@ const Feed = () => {
 
   return (
     <View style={styles.container}>
+      <WebNavBar />
       <ScrollView style={styles.content}>
         <View style={styles.sortContainer}>
           <Picker
