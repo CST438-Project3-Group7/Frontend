@@ -49,6 +49,7 @@ const Feed = () => {
 
           if (!userId) {
             console.error("No user ID found in AsyncStorage");
+            setUser(null);
             return;
           }
 
@@ -136,7 +137,7 @@ const Feed = () => {
 
   return (
     <View style={styles.container}>
-      <WebNavBar username={user?.username || "Username"}/>
+      <WebNavBar username={user?.username || "Guest"} />
       <ScrollView style={styles.content}>
         <View style={styles.sortContainer}>
           <Picker
