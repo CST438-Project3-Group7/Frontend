@@ -62,7 +62,7 @@ const WebNavBar = ({username}) => {
                 <TextInput style={styles.searchInput} placeholder="Search CriticConnect"/>
             </View>
             <View style={styles.navContainer}>
-                <TouchableOpacity style={styles.profileButton}  onPress={toggleDropdown}>
+                <TouchableOpacity style={styles.profileButton}  onPress={username !== "Guest" ? toggleDropdown: () => {}} >
                     <View style={styles.profileIcon} />
                     <Text style={styles.profileText}>{username}</Text>
                     <Ionicons name="chevron-down-outline" size={16} color="black" />
