@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import {router} from 'expo-router';
 
 
-const WebNavBar = () => {
+const WebNavBar = ({username}) => {
     const [activeCategory, setActiveCategory] = useState('feed');
 
     return (
@@ -34,7 +34,7 @@ const WebNavBar = () => {
             <View style={styles.navContainer}>
                 <TouchableOpacity style={styles.profileButton}>
                     <View style={styles.profileIcon} />
-                    <Text style={styles.profileText}>Username</Text>
+                    <Text style={styles.profileText}>{username}</Text>
                     <Ionicons name="chevron-down-outline" size={16} color="black" />
                 </TouchableOpacity>
             </View>
