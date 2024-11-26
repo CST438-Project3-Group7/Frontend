@@ -3,25 +3,75 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Picker } from 're
 import { Ionicons } from '@expo/vector-icons';
 import WebNavBar from './WebNavBar';
 import moment from 'moment';
+import { useFocusEffect } from 'expo-router';
 
-const initialPosts = [
-  { id: 1, title: "Check out this cute cat!", author: "catlover123", subreddit: "r/aww", upvotes: 15200, comments: 304, timestamp: new Date('2024-05-20T10:00:00') },
-  { id: 2, title: "TIL the world's oldest known living tree is over 5,000 years old", author: "natureenthusiast", subreddit: "r/todayilearned", upvotes: 24700, comments: 1023, timestamp: new Date('2024-07-20T03:00:00') },
-  { id: 3, title: "What's a book that changed your life?", author: "bookworm42", subreddit: "r/AskReddit", upvotes: 9800, comments: 3205, timestamp: new Date('2024-11-18T12:00:00') },
-];
+
+// Define the Post interface
+interface Post {
+  id: number;
+  title: string;
+  author: string;
+  content: string;
+  subreddit: string;
+  upvotes: number;
+  comments: number;
+  timestamp: Date;
+  timeAgo: string;
+}
+
+// const initialPosts = [
+//   { id: 1, title: "Check out this cute cat!", author: "catlover123", subreddit: "r/aww", upvotes: 15200, comments: 304, timestamp: new Date('2024-05-20T10:00:00') },
+//   { id: 2, title: "TIL the world's oldest known living tree is over 5,000 years old", author: "natureenthusiast", subreddit: "r/todayilearned", upvotes: 24700, comments: 1023, timestamp: new Date('2024-07-20T03:00:00') },
+//   { id: 3, title: "What's a book that changed your life?", author: "bookworm42", subreddit: "r/AskReddit", upvotes: 9800, comments: 3205, timestamp: new Date('2024-11-18T12:00:00') },
+// ];
+
+
 
 
 const Feed = () => {
-  const [posts, setPosts] = useState(initialPosts);
+  
+  const [posts, setPosts] = useState<Post[]>([]);
   const [selectedSort, setSelectedSort] = useState('newest');
 
-  useEffect(() => {
-    const postsWithTimeAgo = posts.map(post => ({
-      ...post,
-      timeAgo: moment(post.timestamp).fromNow()
-    }));
-    setPosts(postsWithTimeAgo);
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+
+      console.log("Feed tab focused");
+      const fetchPosts = async () => {
+        try {
+          const response = await fetch('https://criticconnect-386d21b2b7d1.herokuapp.com/api/posts', {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            mode: 'cors',
+          });
+          const data = await response.json();
+          console.log("Fetched data:", data);
+
+          const formattedData = data.map((post) => ({
+            id: post.postId, 
+            title: post.title, 
+            author: post.user?.username || "Unknown",
+            content: post.content,
+            subreddit: post.subject?.type || "General", 
+            upvotes: post.likes || 0, 
+            comments: post.comments?.length || 0, 
+            timestamp: new Date(post.datetime), 
+            timeAgo: moment(post.datetime).fromNow(), 
+          }));
+      
+          setPosts(formattedData);
+        
+        } catch (error) {
+          console.error("Error fetching posts:", error);
+        }
+      };
+
+      fetchPosts();
+    }, [])
+  );
+
 
   const sortPosts = (sortOption: string) => {
     let sortedPosts = [...posts];
@@ -62,7 +112,10 @@ const Feed = () => {
           </Picker>
         </View>
         <View style={styles.postsContainer}>
-          {posts.map(post => (
+        {posts.length === 0 ? (
+          <Text>No posts available</Text>
+        ) : (
+          posts.map((post) => (
             <View key={post.id} style={styles.post}>
               <View style={styles.postContent}>
                 <View style={styles.postDetails}>
@@ -70,6 +123,7 @@ const Feed = () => {
                     {post.subreddit} • Posted by u/{post.author} {post.timeAgo}
                   </Text>
                   <Text style={styles.postTitle}>{post.title}</Text>
+                  <Text style={styles.postContentText}>{post.content}</Text>
                   <View style={styles.postActions}>
                     <TouchableOpacity style={styles.actionButton}>
                       <Ionicons name="thumbs-up-outline" size={16} color="gray" />
@@ -95,7 +149,8 @@ const Feed = () => {
                 </View>
               </View>
             </View>
-          ))}
+          ))
+        )}
         </View>
       </ScrollView>
     </View>
@@ -130,6 +185,13 @@ const styles = StyleSheet.create({
   },
   postContent: {
     flexDirection: 'row',
+  },
+  postContentText: {
+    fontSize: 14,
+    color: 'black',
+    marginTop: 8,
+    marginBottom: 8,
+    lineHeight: 20,
   },
   voteContainer: {
     flexDirection: 'column',
