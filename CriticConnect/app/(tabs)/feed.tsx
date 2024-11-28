@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import WebNavBar from './WebNavBar';
 import moment from 'moment';
 import { useFocusEffect } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage'; 
 
 
 // Define the Post interface
@@ -32,11 +33,49 @@ const Feed = () => {
   
   const [posts, setPosts] = useState<Post[]>([]);
   const [selectedSort, setSelectedSort] = useState('newest');
+  const [user, setUser] = useState<User | null>(null);
+
+  interface User {
+    username: string;
+  }
 
   useFocusEffect(
     React.useCallback(() => {
 
-      console.log("Feed tab focused");
+      const fetchUserData = async () => {
+        try {
+          // Get userId from AsyncStorage
+          const userId = await AsyncStorage.getItem('userId');
+
+          if (!userId) {
+            console.error("No user ID found in AsyncStorage");
+            setUser(null);
+            return;
+          }
+
+          // Fetch user data by ID
+          const response = await fetch(`https://criticconnect-386d21b2b7d1.herokuapp.com/api/users/${userId}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            mode: 'cors',
+          });
+
+          if (!response.ok) {
+            throw new Error(`Error fetching user data: ${response.status}`);
+          }
+
+          const userData = await response.json();
+
+          console.log("User data fetched:", userData);
+          setUser(userData);
+        } catch (error) {
+          console.error("Error retrieving user data:", error);
+        }
+      };
+
+  
       const fetchPosts = async () => {
         try {
           const response = await fetch('https://criticconnect-386d21b2b7d1.herokuapp.com/api/posts', {
@@ -69,6 +108,7 @@ const Feed = () => {
       };
 
       fetchPosts();
+      fetchUserData();
     }, [])
   );
 
@@ -97,7 +137,7 @@ const Feed = () => {
 
   return (
     <View style={styles.container}>
-      <WebNavBar />
+      <WebNavBar username={user?.username || "Guest"} />
       <ScrollView style={styles.content}>
         <View style={styles.sortContainer}>
           <Picker
