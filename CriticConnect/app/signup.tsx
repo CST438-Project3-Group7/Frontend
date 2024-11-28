@@ -12,7 +12,6 @@ WebBrowser.maybeCompleteAuthSession();
 const signUp = () => {
   const config={
     webClientId,
-    androidClientId,
   };
   const [request,response,promptAsync] = Google.useAuthRequest(config);
   const getUserProfile=async (token:any)=>{

@@ -6,6 +6,8 @@ import {router} from 'expo-router';
 
 const WebNavBar = () => {
     const [activeCategory, setActiveCategory] = useState('feed');
+    const [showDropdown, setShowDropdown] = useState(false);
+    
 
     return (
         <View style={styles.header}>
@@ -15,28 +17,38 @@ const WebNavBar = () => {
                     <Text style={styles.logoText}>CriticConnect</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={[styles.catButton, activeCategory === 'games' && styles.activeCatButton]} onPress={() => setActiveCategory('games')}>
-                    <Text>Games</Text>
+                    <Text style={styles.catButtonText}>Games</Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
                     style={[styles.catButton, activeCategory === 'movies' && styles.activeCatButton]} 
                     onPress={() => setActiveCategory('movies')}>
-                    <Text>Movies</Text>
+                    <Text style={styles.catButtonText}>Movies</Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
                     style={[styles.catButton, activeCategory === 'music' && styles.activeCatButton]} 
                     onPress={() => setActiveCategory('music')}>
-                    <Text>Music</Text>
+                    <Text style={styles.catButtonText}>Music</Text>
                 </TouchableOpacity>
             </View>
             <View style={styles.searchContainer}>
                 <TextInput style={styles.searchInput} placeholder="Search CriticConnect"/>
             </View>
             <View style={styles.navContainer}>
-                <TouchableOpacity style={styles.profileButton}>
-                    <View style={styles.profileIcon} />
-                    <Text style={styles.profileText}>Username</Text>
-                    <Ionicons name="chevron-down-outline" size={16} color="black" />
+                <TouchableOpacity style={styles.profileButton} onPress={() => setShowDropdown(!showDropdown)}>
+                  <View style={styles.profileIcon} />
+                  <Text style={styles.profileText}>Username</Text>
+                  <Ionicons name="chevron-down-outline" size={16} color="black" />
                 </TouchableOpacity>
+                {showDropdown && (
+                  <View style={styles.dropdownMenu}>
+                    <TouchableOpacity style={styles.dropdownItem} onPress={() => router.push('/EditProfile')}>
+                      <Text style={styles.dropdownText}>Edit Profile</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.dropdownItem}>
+                      <Text style={styles.dropdownText}>Logout</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
             </View>
         </View>
       </View>
@@ -46,12 +58,13 @@ const styles = StyleSheet.create({
     header: {
         backgroundColor: '#fff',
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
+        shadowOffset: { width: 0, height: 3 },
         shadowOpacity: 0.1,
         shadowRadius: 5,
         elevation: 3,
-        paddingVertical: 10,
+        paddingVertical: 15,
         paddingHorizontal: 20,
+        zIndex: 1,
       },
       headerContent: {
         flexDirection: 'row',
@@ -63,7 +76,7 @@ const styles = StyleSheet.create({
         spaceX: 2,
       },
       logoText: {
-        fontSize: 24,
+        fontSize: 24*1.2,
         fontWeight: 'bold',
         color: 'green',
         marginLeft: 8,
@@ -77,6 +90,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         paddingHorizontal: 10,
         height: 40,
+        fontSize: 16*1.2,
       },
       navContainer: {
         flexDirection: 'row',
@@ -89,6 +103,10 @@ const styles = StyleSheet.create({
       activeCatButton: {
         borderBottomWidth: 2,
         borderColor: 'green',
+      },
+      catButtonText:{
+        fontSize: 16*1.2,
+        color: 'black',
       },
       profileButton: {
         flexDirection: 'row',
@@ -108,8 +126,31 @@ const styles = StyleSheet.create({
         marginRight: 8,
       },
       profileText: {
-        fontSize: 16,
+        fontSize: 16*1.2,
         marginRight: 4,
+      },
+      dropdownMenu: {
+        position: 'absolute',
+        top: 40,
+        right: 0,
+        backgroundColor: '#fff',
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 8,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 5,
+        elevation: 3,
+        zIndex: 1000,
+      },
+      dropdownItem: {
+        padding: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+      },
+      dropdownText: {
+        fontSize: 16*1.2,
       },
 });
 

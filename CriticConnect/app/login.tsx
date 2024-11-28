@@ -33,7 +33,7 @@ const login = () => {
             secureTextEntry
           />
         </View>  
-        <TouchableOpacity style={styles.submitButton} onPress={()=>router.push()}>
+        <TouchableOpacity style={styles.submitButton} onPress={()=>router.push('/(tabs)/feed')}>
           <Text style={styles.submitButtonText}>Login</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.link} onPress={()=> router.push('/signup')}>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Picker } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import WebNavBar from './WebNavBar';
+import WebNavBar from '../WebNavBar';
 import moment from 'moment';
 import { useFocusEffect } from 'expo-router';
 
@@ -18,15 +18,6 @@ interface Post {
   timestamp: Date;
   timeAgo: string;
 }
-
-// const initialPosts = [
-//   { id: 1, title: "Check out this cute cat!", author: "catlover123", subreddit: "r/aww", upvotes: 15200, comments: 304, timestamp: new Date('2024-05-20T10:00:00') },
-//   { id: 2, title: "TIL the world's oldest known living tree is over 5,000 years old", author: "natureenthusiast", subreddit: "r/todayilearned", upvotes: 24700, comments: 1023, timestamp: new Date('2024-07-20T03:00:00') },
-//   { id: 3, title: "What's a book that changed your life?", author: "bookworm42", subreddit: "r/AskReddit", upvotes: 9800, comments: 3205, timestamp: new Date('2024-11-18T12:00:00') },
-// ];
-
-
-
 
 const Feed = () => {
   
@@ -52,9 +43,9 @@ const Feed = () => {
           const formattedData = data.map((post) => ({
             id: post.postId, 
             title: post.title, 
-            author: post.user?.username || "Unknown",
+            author: post.user?.username || "Deleted User",
             content: post.content,
-            subreddit: post.subject?.type || "General", 
+            subject: post.subject?.type || "Unknown", 
             upvotes: post.likes || 0, 
             comments: post.comments?.length || 0, 
             timestamp: new Date(post.datetime), 
@@ -85,8 +76,8 @@ const Feed = () => {
       case 'most-liked':
         sortedPosts.sort((a, b) => b.upvotes - a.upvotes);
         break;
-      case 'subreddit':
-        sortedPosts.sort((a, b) => a.subreddit.localeCompare(b.subreddit));
+      case 'subject':
+        sortedPosts.sort((a, b) => a.subject.localeCompare(b.subject));
         break;
       default:
         break;
