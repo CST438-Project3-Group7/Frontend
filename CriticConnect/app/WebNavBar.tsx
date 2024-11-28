@@ -2,12 +2,28 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import {router} from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-const WebNavBar = () => {
+const WebNavBar = ({username}) => {
     const [activeCategory, setActiveCategory] = useState('feed');
-    const [showDropdown, setShowDropdown] = useState(false);
-    
+
+    const [dropdownVisible, setDropdownVisible] = useState(false);
+
+    const toggleDropdown = () => {
+      setDropdownVisible(!dropdownVisible);
+    };
+
+    const handleLogout = async() => {
+      console.log('Logout');
+      setDropdownVisible(false);
+      try {
+        await AsyncStorage.removeItem('userId'); 
+        router.push('/login'); 
+      } catch (error) {
+        console.error('Error removing user ID from AsyncStorage:', error);
+      }
+    };
 
     return (
         <View style={styles.header}>
@@ -34,25 +50,25 @@ const WebNavBar = () => {
                 <TextInput style={styles.searchInput} placeholder="Search CriticConnect"/>
             </View>
             <View style={styles.navContainer}>
-                <TouchableOpacity style={styles.profileButton} onPress={() => setShowDropdown(!showDropdown)}>
-                  <View style={styles.profileIcon} />
-                  <Text style={styles.profileText}>Username</Text>
-                  <Ionicons name="chevron-down-outline" size={16} color="black" />
+                <TouchableOpacity style={styles.profileButton}  onPress={username !== "Guest" ? toggleDropdown: () => {}} >
+                    <View style={styles.profileIcon} />
+                    <Text style={styles.profileText}>{username}</Text>
+                    <Ionicons name="chevron-down-outline" size={16} color="black" />
                 </TouchableOpacity>
-                {showDropdown && (
-                  <View style={styles.dropdownMenu}>
-                    <TouchableOpacity style={styles.dropdownItem} onPress={() => router.push('/EditProfile')}>
-                      <Text style={styles.dropdownText}>Edit Profile</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.dropdownItem}>
-                      <Text style={styles.dropdownText}>Logout</Text>
-                    </TouchableOpacity>
-                  </View>
-                )}
+                {dropdownVisible && (
+            <View style={styles.dropdown}>
+              <TouchableOpacity style={styles.dropdownOption} onPress={()=> router.push('/EditProfile')}>
+                <Text style={styles.dropdownText}>Edit Profile</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.dropdownOption} onPress={handleLogout}>
+                <Text style={styles.dropdownText}>Logout</Text>
+              </TouchableOpacity>
             </View>
+          )}
         </View>
       </View>
-    );
+    </View>
+  );
 };
 const styles = StyleSheet.create({
     header: {
@@ -73,7 +89,6 @@ const styles = StyleSheet.create({
       logoContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        spaceX: 2,
       },
       logoText: {
         fontSize: 24*1.2,
@@ -96,6 +111,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginLeft: 16,
+        position: 'relative',
       },
       catButton: {
         marginHorizontal: 8,
@@ -129,7 +145,7 @@ const styles = StyleSheet.create({
         fontSize: 16*1.2,
         marginRight: 4,
       },
-      dropdownMenu: {
+      dropdown: {
         position: 'absolute',
         top: 40,
         right: 0,
@@ -144,7 +160,7 @@ const styles = StyleSheet.create({
         elevation: 3,
         zIndex: 1000,
       },
-      dropdownItem: {
+      dropdownOption: {
         padding: 10,
         borderBottomWidth: 1,
         borderBottomColor: '#ccc',
