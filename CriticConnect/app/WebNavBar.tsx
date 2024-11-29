@@ -32,17 +32,17 @@ const WebNavBar = ({username}) => {
                 <TouchableOpacity style={[styles.logoContainer, activeCategory === 'feed' && styles.logoContainer]} onPress={() => setActiveCategory('feed')}>
                     <Text style={styles.logoText}>CriticConnect</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.catButton, activeCategory === 'games' && styles.activeCatButton]} onPress={() => setActiveCategory('games')}>
+                <TouchableOpacity style={[styles.catButton, activeCategory === 'Games' && styles.activeCatButton]} onPress={() => setActiveCategory('Games')}>
                     <Text style={styles.catButtonText}>Games</Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
-                    style={[styles.catButton, activeCategory === 'movies' && styles.activeCatButton]} 
-                    onPress={() => setActiveCategory('movies')}>
+                    style={[styles.catButton, activeCategory === 'Film' && styles.activeCatButton]} 
+                    onPress={() => setActiveCategory('Film')}>
                     <Text style={styles.catButtonText}>Movies</Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
-                    style={[styles.catButton, activeCategory === 'music' && styles.activeCatButton]} 
-                    onPress={() => setActiveCategory('music')}>
+                    style={[styles.catButton, activeCategory === 'Music' && styles.activeCatButton]} 
+                    onPress={() => setActiveCategory('Music')}>
                     <Text style={styles.catButtonText}>Music</Text>
                 </TouchableOpacity>
             </View>
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         paddingHorizontal: 10,
         paddingVertical: 5,
-        marginLeft: 8,
+        marginLeft: 25,
       },
       profileIcon: {
         width: 24,

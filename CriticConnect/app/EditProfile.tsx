@@ -1,16 +1,60 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import WebNavBar from './WebNavBar';
-import { router } from 'expo-router';
+import { router,useFocusEffect } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage'; 
 
 const EditProfile = () => {
   const navigation = useNavigation();
-  const [userId, setUserId] = useState(2);
-  const [username, setUsername] = useState('');
+  const [editUsername, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [reEnterPassword, setReEnterPassword] = useState('');
   const [roles, setRoles] = useState('USER');
+  const [user, setUser] = useState<User | null>(null);
+
+  interface User {
+    username: string;
+  }
+
+  useFocusEffect(
+    React.useCallback(() => {
+
+      const fetchUserData = async () => {
+        try {
+          // Get userId from AsyncStorage
+          const userId = await AsyncStorage.getItem('userId');
+
+          if (!userId) {
+            console.error("No user ID found in AsyncStorage");
+            setUser(null);
+            return;
+          }
+
+          // Fetch user data by ID
+          const response = await fetch(`https://criticconnect-386d21b2b7d1.herokuapp.com/api/users/${userId}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            mode: 'cors',
+          });
+
+          if (!response.ok) {
+            throw new Error(`Error fetching user data: ${response.status}`);
+          }
+
+          const userData = await response.json();
+
+          console.log("User data fetched:", userData);
+          setUser(userData);
+        } catch (error) {
+          console.error("Error retrieving user data:", error);
+        }
+      };
+      fetchUserData();
+    }, [])
+  );
 
   const handleSave = () => {
     if (password !== reEnterPassword) {
@@ -24,7 +68,7 @@ const EditProfile = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({userId, username, password, roles}),
+          body: JSON.stringify({userId, editUsername, password, roles}),
         });
         if (!response.ok) {
           throw new Error('Failed to update profile');
@@ -40,13 +84,13 @@ const EditProfile = () => {
     };
 
     updateUser();
-    console.log('Profile saved:', { username,password,reEnterPassword });
+    console.log('Profile saved:', { editUsername,password,reEnterPassword });
     navigation.goBack();
   };
 
   return (
     <View style={styles.container}>
-      <WebNavBar />
+      <WebNavBar username={user?.username || "Guest"} />
         <ScrollView style={styles.content}>
           <Text style={styles.title}>Edit Profile</Text>
             <View style={styles.formGroup}>
@@ -54,7 +98,7 @@ const EditProfile = () => {
                 <TextInput
                 style={styles.input}
                 placeholder="Username"
-                value={username}
+                value={editUsername}
                 onChangeText={setUsername}
                 />
             </View>
