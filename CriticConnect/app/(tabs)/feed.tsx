@@ -13,7 +13,7 @@ interface Post {
   title: string;
   author: string;
   content: string;
-  subreddit: string;
+  topic: string;
   upvotes: number;
   comments: number;
   timestamp: Date;
@@ -21,9 +21,9 @@ interface Post {
 }
 
 // const initialPosts = [
-//   { id: 1, title: "Check out this cute cat!", author: "catlover123", subreddit: "r/aww", upvotes: 15200, comments: 304, timestamp: new Date('2024-05-20T10:00:00') },
-//   { id: 2, title: "TIL the world's oldest known living tree is over 5,000 years old", author: "natureenthusiast", subreddit: "r/todayilearned", upvotes: 24700, comments: 1023, timestamp: new Date('2024-07-20T03:00:00') },
-//   { id: 3, title: "What's a book that changed your life?", author: "bookworm42", subreddit: "r/AskReddit", upvotes: 9800, comments: 3205, timestamp: new Date('2024-11-18T12:00:00') },
+//   { id: 1, title: "Check out this cute cat!", author: "catlover123", topic: "r/aww", upvotes: 15200, comments: 304, timestamp: new Date('2024-05-20T10:00:00') },
+//   { id: 2, title: "TIL the world's oldest known living tree is over 5,000 years old", author: "natureenthusiast", topic: "r/todayilearned", upvotes: 24700, comments: 1023, timestamp: new Date('2024-07-20T03:00:00') },
+//   { id: 3, title: "What's a book that changed your life?", author: "bookworm42", topic: "r/AskReddit", upvotes: 9800, comments: 3205, timestamp: new Date('2024-11-18T12:00:00') },
 // ];
 
 
@@ -93,7 +93,7 @@ const Feed = () => {
             title: post.title, 
             author: post.user?.username || "Unknown",
             content: post.content,
-            subreddit: post.subject?.type || "General", 
+            topic: post.subject?.type || "General",
             upvotes: post.likes || 0, 
             comments: post.comments?.length || 0, 
             timestamp: new Date(post.datetime), 
@@ -125,8 +125,8 @@ const Feed = () => {
       case 'most-liked':
         sortedPosts.sort((a, b) => b.upvotes - a.upvotes);
         break;
-      case 'subreddit':
-        sortedPosts.sort((a, b) => a.subreddit.localeCompare(b.subreddit));
+      case 'topic':
+        sortedPosts.sort((a, b) => a.topic.localeCompare(b.topic));
         break;
       default:
         break;
@@ -148,7 +148,7 @@ const Feed = () => {
             <Picker.Item label="Newest" value="newest" />
             <Picker.Item label="Oldest" value="oldest" />
             <Picker.Item label="Most Liked" value="most-liked" />
-            <Picker.Item label="Subreddit" value="subreddit" />
+            <Picker.Item label="Favorites" value="topic" />
           </Picker>
         </View>
         <View style={styles.postsContainer}>
@@ -160,7 +160,7 @@ const Feed = () => {
               <View style={styles.postContent}>
                 <View style={styles.postDetails}>
                   <Text style={styles.postMeta}>
-                    {post.subreddit} • Posted by u/{post.author} {post.timeAgo}
+                    {post.topic} • Posted by {post.author} {post.timeAgo}
                   </Text>
                   <Text style={styles.postTitle}>{post.title}</Text>
                   <Text style={styles.postContentText}>{post.content}</Text>
