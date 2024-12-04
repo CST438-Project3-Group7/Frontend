@@ -12,6 +12,7 @@ export default function RootLayout() {
         <Tabs.Screen name="cgames" options={{ headerShown: false }} />
         <Tabs.Screen name="cmusic" options={{ headerShown: false }} />
         <Tabs.Screen name="feed" options={{ headerShown: false }} />
+        <Tabs.Screen name="post" options={{ headerShown: false }} />
     </Tabs>
   );
 }
