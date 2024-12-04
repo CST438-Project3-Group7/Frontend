@@ -40,40 +40,6 @@ interface Post {
   datetime: string;
 }
 
-/*
-const fetchUserData = async () => {
-  try {
-    // Get userId from AsyncStorage
-    const userId = await AsyncStorage.getItem('userId');
-
-    if (!userId) {
-      console.error("No user ID found in AsyncStorage");
-      setUser(null);
-      return;
-    }
-
-    // Fetch user data by ID
-    const response = await fetch(`https://criticconnect-386d21b2b7d1.herokuapp.com/api/users/${userId}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      mode: 'cors',
-    });
-
-    if (!response.ok) {
-      throw new Error(`Error fetching user data: ${response.status}`);
-    }
-
-    const userData = await response.json();
-
-    console.log("User data fetched:", userData);
-    setUser(userData);
-  } catch (error) {
-    console.error("Error retrieving user data:", error);
-  }
-}; */
-
 const PostForm: React.FC = () => {
   const [post, setPost] = useState<Omit<Post, "postId">>({
     title: "",
@@ -81,10 +47,10 @@ const PostForm: React.FC = () => {
     likes: 0,
     dislikes: 0,
     user: {
-      userId: 1, 
-      username: "trent",
-      password: "test",
-      roles: "ADMIN",
+      userId: 0,
+      username: "",
+      password: "",
+      roles: "",
     },
     subject: { title: "", year: new Date().getFullYear(), type: "", favorites: [] },
     comments: [],
@@ -100,11 +66,45 @@ const PostForm: React.FC = () => {
   });
   const [showModal, setShowModal] = useState(false);
 
+  // Fetch user data from AsyncStorage and the database
+  const fetchUserData = async () => {
+    try {
+      const userId = await AsyncStorage.getItem('userId');
+      if (!userId) {
+        console.error("No user ID found in AsyncStorage");
+        Alert.alert("Error", "User not found.");
+        return;
+      }
+
+      const response = await fetch(`https://criticconnect-386d21b2b7d1.herokuapp.com/api/users/${userId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error fetching user data: ${response.status}`);
+      }
+
+      const userData = await response.json();
+      console.log("User data fetched:", userData);
+
+      setPost((prevPost) => ({
+      ...prevPost,
+      user: userData,
+    }));
+      console.log("post: ", post);
+    } catch (error) {
+      console.error("Error retrieving user data:", error);
+      Alert.alert("Error", "Failed to fetch user data.");
+    }
+  };
+
   // Fetch all subjects
   const fetchSubjects = async () => {
     try {
       const response = await fetch(
-        //"http://localhost:8080/api/subjects",
         "https://criticconnect-386d21b2b7d1.herokuapp.com/api/subjects",
         {
           method: "GET",
@@ -114,11 +114,9 @@ const PostForm: React.FC = () => {
         }
       );
       const data = await response.json();
-      Alert.alert("data", data);
       setSubjects(data);
-      console.log(data);
-      console.log(subjects);
     } catch (error) {
+      console.error("Error fetching subjects:", error);
       Alert.alert("Error", "Failed to fetch subjects.");
     }
   };
@@ -147,6 +145,7 @@ const PostForm: React.FC = () => {
         Alert.alert("Error", "Failed to create subject.");
       }
     } catch (error) {
+      console.error("Error creating subject:", error);
       Alert.alert("Error", "Failed to create subject.");
     }
   };
@@ -158,8 +157,11 @@ const PostForm: React.FC = () => {
       const date = new Date(now);
       const isoDate = date.toISOString().split(".")[0];
 
-      const postToSubmit = { ...post, datetime: isoDate, likes: 0, dislikes: 0 }; 
-      console.log(postToSubmit);
+      const postToSubmit = { ...post, datetime: isoDate, likes: 0, dislikes: 0 };
+      console.log("Post to submit:", postToSubmit);
+
+      console.log("Post to submit:", post);
+
       const response = await fetch(
         "https://criticconnect-386d21b2b7d1.herokuapp.com/api/posts",
         {
@@ -178,13 +180,19 @@ const PostForm: React.FC = () => {
         Alert.alert("Error", "Failed to create post.");
       }
     } catch (error) {
+      console.error("Error submitting post:", error);
       Alert.alert("Error", "Failed to create post.");
     }
   };
 
   useEffect(() => {
     fetchSubjects();
+    fetchUserData(); // Fetch user data on component mount
   }, []);
+
+  useEffect(() => {
+    console.log("Post updated:", post);
+  }, [post]);
 
   return (
     <ScrollView style={styles.container}>
