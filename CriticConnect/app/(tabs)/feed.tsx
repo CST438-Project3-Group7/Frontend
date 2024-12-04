@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Picker } from 're
 import { Ionicons } from '@expo/vector-icons';
 import WebNavBar from '../WebNavBar';
 import moment from 'moment';
-import { useFocusEffect } from 'expo-router';
+import {router, useFocusEffect } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage'; 
 
 
@@ -130,7 +130,9 @@ const Feed = () => {
     <View style={styles.container}>
       <WebNavBar username={user?.username || "Guest"} />
       <ScrollView style={styles.content}>
+        
         <View style={styles.sortContainer}>
+          <Text style={{ fontSize: 16}}>Sort by    </Text>
           <Picker
             selectedValue={selectedSort}
             style={{ height: 50, width: 150 }}
@@ -198,6 +200,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   sortContainer: {
+    flex:1,
     marginBottom: 16,
   },
   postsContainer: {

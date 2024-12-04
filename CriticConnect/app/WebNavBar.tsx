@@ -51,14 +51,13 @@ const WebNavBar = ({username}) => {
             </View>
             <View style={styles.navContainer}>
                 <TouchableOpacity style={styles.profileButton}  onPress={username !== "Guest" ? toggleDropdown: () => {}} >
-                    <View style={styles.profileIcon} />
                     <Text style={styles.profileText}>{username}</Text>
                     <Ionicons name="chevron-down-outline" size={16} color="black" />
                 </TouchableOpacity>
                 {dropdownVisible && (
             <View style={styles.dropdown}>
-              <TouchableOpacity style={styles.dropdownOption} onPress={()=> router.push('/EditProfile')}>
-                <Text style={styles.dropdownText}>Edit Profile</Text>
+              <TouchableOpacity style={styles.dropdownOption} onPress={()=> router.push('/Profile')}>
+                <Text style={styles.dropdownText}>Profile</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.dropdownOption} onPress={handleLogout}>
                 <Text style={styles.dropdownText}>Logout</Text>
