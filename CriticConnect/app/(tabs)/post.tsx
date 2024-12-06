@@ -11,7 +11,7 @@ import {
   Alert,
 } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 
 interface User {
   userId: number;
@@ -175,9 +175,30 @@ const PostForm: React.FC = () => {
 
       if (response.ok) {
         Alert.alert("Success", "Post created successfully!");
+        setPost({
+          title: "",
+          content: "",
+          likes: 0,
+          dislikes: 0,
+          user: {
+            userId: 0,
+            username: "",
+            password: "",
+            roles: "",
+          },
+          subject: { title: "", year: new Date().getFullYear(), type: "", favorites: [] },
+          comments: [],
+          datetime: new Date().toISOString(),
+        });
         router.push('/feed');
       } else {
-        Alert.alert("Error", "Failed to create post.");
+        console.log("Before alert");                
+        try {
+          Alert.alert("Error", "Failed to create post.");
+        } catch (error) {
+          console.error("Error triggering alert:", error);
+        }
+        console.log("After alert");
       }
     } catch (error) {
       console.error("Error submitting post:", error);
@@ -185,14 +206,18 @@ const PostForm: React.FC = () => {
     }
   };
 
-  useEffect(() => {
+
+  useFocusEffect(
+    React.useCallback(() => {
     fetchSubjects();
     fetchUserData(); // Fetch user data on component mount
-  }, []);
+  }, []));
 
+  /*
   useEffect(() => {
     console.log("Post updated:", post);
   }, [post]);
+  */
 
   return (
     <ScrollView style={styles.container}>
