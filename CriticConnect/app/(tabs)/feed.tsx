@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Picker } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import WebNavBar from './WebNavBar';
+import WebNavBar from '../WebNavBar';
 import moment from 'moment';
-import { useFocusEffect } from 'expo-router';
+import {router, useFocusEffect } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage'; 
 
 
@@ -19,15 +19,6 @@ interface Post {
   timestamp: Date;
   timeAgo: string;
 }
-
-// const initialPosts = [
-//   { id: 1, title: "Check out this cute cat!", author: "catlover123", topic: "r/aww", upvotes: 15200, comments: 304, timestamp: new Date('2024-05-20T10:00:00') },
-//   { id: 2, title: "TIL the world's oldest known living tree is over 5,000 years old", author: "natureenthusiast", topic: "r/todayilearned", upvotes: 24700, comments: 1023, timestamp: new Date('2024-07-20T03:00:00') },
-//   { id: 3, title: "What's a book that changed your life?", author: "bookworm42", topic: "r/AskReddit", upvotes: 9800, comments: 3205, timestamp: new Date('2024-11-18T12:00:00') },
-// ];
-
-
-
 
 const Feed = () => {
   
@@ -91,7 +82,7 @@ const Feed = () => {
           const formattedData = data.map((post) => ({
             id: post.postId, 
             title: post.title, 
-            author: post.user?.username || "Unknown",
+            author: post.user?.username || "Deleted User",
             content: post.content,
             topic: post.subject?.type || "General",
             upvotes: post.likes || 0, 
@@ -139,7 +130,9 @@ const Feed = () => {
     <View style={styles.container}>
       <WebNavBar username={user?.username || "Guest"} />
       <ScrollView style={styles.content}>
+        
         <View style={styles.sortContainer}>
+          <Text style={{ fontSize: 16}}>Sort by    </Text>
           <Picker
             selectedValue={selectedSort}
             style={{ height: 50, width: 150 }}
@@ -207,6 +200,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   sortContainer: {
+    flex:1,
     marginBottom: 16,
   },
   postsContainer: {
