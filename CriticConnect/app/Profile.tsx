@@ -88,6 +88,14 @@ const Profile = () => {
 
       const fetchPosts = async () => {
         try {
+
+          const userId = await AsyncStorage.getItem('userId');
+          if (!userId) {
+            console.error("No user ID found in AsyncStorage");
+            setUser(null);
+            return;
+          }
+          
           const response = await fetch(`https://criticconnect-386d21b2b7d1.herokuapp.com/api/posts/user/${userId}`, {
             method: 'GET',
             headers: {
