@@ -121,15 +121,6 @@ const signUp = () => {
           />
         </View>
         <View style={styles.formGroup}>
-          <Text style={styles.label}>Email address</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Email address"
-            keyboardType="email-address"
-            autoComplete="email"
-          />
-        </View>
-        <View style={styles.formGroup}>
           <Text style={styles.label}>Password</Text>
           <TextInput
             value={password}
