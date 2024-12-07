@@ -6,6 +6,7 @@ import moment from 'moment';
 import { router,useFocusEffect } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage'; 
 import { Ionicons } from '@expo/vector-icons';
+import StarRating from '@/components/StarRating';
 
 interface Post {
   id: number;
@@ -17,6 +18,7 @@ interface Post {
   comments: number;
   timestamp: Date;
   timeAgo: string;
+  rating: number;
 }
 
 const Profile = () => {
@@ -95,7 +97,7 @@ const Profile = () => {
             setUser(null);
             return;
           }
-          
+
           const response = await fetch(`https://criticconnect-386d21b2b7d1.herokuapp.com/api/posts/user/${userId}`, {
             method: 'GET',
             headers: {
@@ -116,6 +118,7 @@ const Profile = () => {
             comments: post.comments?.length || 0, 
             timestamp: new Date(post.datetime), 
             timeAgo: moment(post.datetime).fromNow(), 
+            rating: post.dislikes,
           }));
       
           setPosts(formattedData);
@@ -270,15 +273,18 @@ const Profile = () => {
                   </Text>
                   <Text style={styles.postTitle}>{post.title}</Text>
                   <Text style={styles.postContentText}>{post.content}</Text>
+                  <View style={{ marginTop: 8 }}>
+                    <StarRating rating={post.rating} />
+                  </View>
                   <View style={styles.postActions}>
                     <TouchableOpacity style={styles.actionButton}>
                       <Ionicons name="thumbs-up-outline" size={16} color="gray" />
-                      <Text style={styles.actionText}>Like amount</Text>
+                      <Text style={styles.actionText}>{post.upvotes} Likes</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.actionButton}>
+                    {/* <TouchableOpacity style={styles.actionButton}>
                       <Ionicons name="thumbs-down-outline" size={16} color="gray" />
                       <Text style={styles.actionText}>Dislike amount</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                     <TouchableOpacity style={styles.actionButton}>
                       <Ionicons name="chatbubble-outline" size={16} color="gray" />
                       <Text style={styles.actionText}>{post.comments} Comments</Text>

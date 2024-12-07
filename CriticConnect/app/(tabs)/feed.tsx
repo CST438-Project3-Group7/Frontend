@@ -5,6 +5,7 @@ import WebNavBar from '../WebNavBar';
 import moment from 'moment';
 import {router, useFocusEffect } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage'; 
+import StarRating from '@/components/StarRating';
 
 
 // Define the Post interface
@@ -18,6 +19,7 @@ interface Post {
   comments: number;
   timestamp: Date;
   timeAgo: string;
+  rating: number;
 }
 
 const Feed = () => {
@@ -89,6 +91,7 @@ const Feed = () => {
             comments: post.comments?.length || 0, 
             timestamp: new Date(post.datetime), 
             timeAgo: moment(post.datetime).fromNow(), 
+            rating: post.dislikes,
           }));
       
           setPosts(formattedData);
@@ -157,15 +160,18 @@ const Feed = () => {
                   </Text>
                   <Text style={styles.postTitle}>{post.title}</Text>
                   <Text style={styles.postContentText}>{post.content}</Text>
+                  <View style={{ marginTop: 8 }}>
+                    <StarRating rating={post.rating} />
+                  </View>
                   <View style={styles.postActions}>
                     <TouchableOpacity style={styles.actionButton}>
                       <Ionicons name="thumbs-up-outline" size={16} color="gray" />
-                      <Text style={styles.actionText}>Like amount</Text>
+                      <Text style={styles.actionText}>{post.upvotes} Likes</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.actionButton}>
+                    {/* <TouchableOpacity style={styles.actionButton}>
                       <Ionicons name="thumbs-down-outline" size={16} color="gray" />
-                      <Text style={styles.actionText}>Dislike amount</Text>
-                    </TouchableOpacity>
+                      <Text style={styles.actionText}>{post.rating}Dislike amount</Text>
+                    </TouchableOpacity> */}
                     <TouchableOpacity style={styles.actionButton}>
                       <Ionicons name="chatbubble-outline" size={16} color="gray" />
                       <Text style={styles.actionText}>{post.comments} Comments</Text>
