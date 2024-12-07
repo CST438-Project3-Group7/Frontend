@@ -13,7 +13,7 @@ interface Post {
   title: string;
   author: string;
   content: string;
-  subreddit: string;
+  topic: string;
   upvotes: number;
   comments: number;
   timestamp: Date;
@@ -84,7 +84,7 @@ const Feed = () => {
             title: post.title, 
             author: post.user?.username || "Deleted User",
             content: post.content,
-            subject: post.subject?.type || "Unknown", 
+            topic: post.subject?.type || "General",
             upvotes: post.likes || 0, 
             comments: post.comments?.length || 0, 
             timestamp: new Date(post.datetime), 
@@ -116,8 +116,8 @@ const Feed = () => {
       case 'most-liked':
         sortedPosts.sort((a, b) => b.upvotes - a.upvotes);
         break;
-      case 'subject':
-        sortedPosts.sort((a, b) => a.subject.localeCompare(b.subject));
+      case 'topic':
+        sortedPosts.sort((a, b) => a.topic.localeCompare(b.topic));
         break;
       default:
         break;
@@ -141,7 +141,7 @@ const Feed = () => {
             <Picker.Item label="Newest" value="newest" />
             <Picker.Item label="Oldest" value="oldest" />
             <Picker.Item label="Most Liked" value="most-liked" />
-            <Picker.Item label="Subreddit" value="subreddit" />
+            <Picker.Item label="Favorites" value="topic" />
           </Picker>
         </View>
         <View style={styles.postsContainer}>
@@ -153,7 +153,7 @@ const Feed = () => {
               <View style={styles.postContent}>
                 <View style={styles.postDetails}>
                   <Text style={styles.postMeta}>
-                    {post.subreddit} • Posted by u/{post.author} {post.timeAgo}
+                    {post.topic} • Posted by {post.author} {post.timeAgo}
                   </Text>
                   <Text style={styles.postTitle}>{post.title}</Text>
                   <Text style={styles.postContentText}>{post.content}</Text>
