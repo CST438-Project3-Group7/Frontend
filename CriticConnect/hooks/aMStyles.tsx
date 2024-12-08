@@ -81,5 +81,34 @@ const styles = StyleSheet.create({
       color: '#000',
       textDecorationLine: 'underline',
     },
+    googleContainer:{
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: 16,
+    },
+    googleButton: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: 'black', 
+      paddingVertical: 12,
+      paddingHorizontal: 24,
+      borderRadius: 30,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+      elevation: 5,
+    },
+    googleLogo: {
+      width: 24, 
+      height: 24, 
+      marginRight: 10
+    },
+    googleButtonText: {
+      color: '#fff',
+      fontFamily: 'LexendDeca',
+      fontStyle: 'normal',
+    },
   });
 export default styles;

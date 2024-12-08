@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Picker } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import {Picker} from "@react-native-picker/picker";
 import { Ionicons } from '@expo/vector-icons';
-import WebNavBar from '../WebNavBar';
+import WebNavBar from './WebNavBar';
 import moment from 'moment';
 import {router, useFocusEffect } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage'; 

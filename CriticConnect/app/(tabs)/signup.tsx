@@ -7,12 +7,14 @@ import * as Google from "expo-auth-session/providers/google";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const webClientId = '973280850643-799591b5eq02v6gcqsp59jneh22atura.apps.googleusercontent.com';
+const androidClientId= '973280850643-qcntidlb6onkpao1mkqovo0ugtku336h.apps.googleusercontent.com';
 
 WebBrowser.maybeCompleteAuthSession();
 
 const signUp = () => {
   const config={
     webClientId,
+    androidClientId,
     // androidClientId,
   };
   const [request,response,promptAsync] = Google.useAuthRequest(config);
@@ -28,6 +30,7 @@ const signUp = () => {
       console.error(e);
     }
   };
+
   const handleToken=()=>{
     if(response?.type === 'success'){
       const {authentication} = response;
@@ -100,6 +103,11 @@ const signUp = () => {
     handleToken();
   },[response]);
 
+  const handletemplogout = async() => {
+    await AsyncStorage.removeItem('@user');
+    await AsyncStorage.removeItem('userId');  
+  }
+
   return (
     <View>
       <View style={styles.navContainer}>
@@ -144,6 +152,9 @@ const signUp = () => {
         <View style={styles.link}>
           <Text>or</Text>
         </View>
+        <TouchableOpacity onPress={()=> handletemplogout()}>
+          <Text>logout any async storage user</Text>
+        </TouchableOpacity>
         <View>
           <TouchableOpacity onPress={()=> promptAsync()}>
             <Text>Sign in with Google</Text>
