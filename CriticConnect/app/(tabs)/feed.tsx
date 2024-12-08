@@ -5,6 +5,8 @@ import WebNavBar from '../WebNavBar';
 import moment from 'moment';
 import { router, useFocusEffect } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage'; 
+import StarRating from '@/components/StarRating';
+import { fetchPostById, updatePost } from '@/utils/posts';
 
 
 // Define the Post interface
@@ -18,6 +20,9 @@ interface Post {
   comments: number;
   timestamp: Date;
   timeAgo: string;
+  rating: number;
+  liked: boolean;
+  subjectTitle: string;
 }
 
 const Feed = () => {
@@ -25,10 +30,45 @@ const Feed = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [selectedSort, setSelectedSort] = useState('newest');
   const [user, setUser] = useState<User | null>(null);
+  const [likedState, setLikedState] = useState<{ [key: number]: boolean }>({}); 
 
   interface User {
     username: string;
   }
+
+  const fetchPosts = async () => {
+    try {
+      const response = await fetch('https://criticconnect-386d21b2b7d1.herokuapp.com/api/posts', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        mode: 'cors',
+      });
+      const data = await response.json();
+      console.log("Fetched data:", data);
+
+      const formattedData = data.map((post) => ({
+        id: post.postId, 
+        title: post.title, 
+        author: post.user?.username || "Deleted User",
+        content: post.content,
+        topic: post.subject?.type || "General",
+        upvotes: post.likes || 0, 
+        comments: post.comments?.length || 0, 
+        timestamp: new Date(post.datetime), 
+        timeAgo: moment(post.datetime).fromNow(), 
+        rating: post.dislikes,
+        liked: false,
+        subjectTitle: post.subject?.title || "General",
+      }));
+  
+      setPosts(formattedData);
+    
+    } catch (error) {
+      console.error("Error fetching posts:", error);
+    }
+  };
 
   useFocusEffect(
     React.useCallback(() => {
@@ -66,38 +106,6 @@ const Feed = () => {
         }
       };
 
-  
-      const fetchPosts = async () => {
-        try {
-          const response = await fetch('https://criticconnect-386d21b2b7d1.herokuapp.com/api/posts', {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            mode: 'cors',
-          });
-          const data = await response.json();
-          console.log("Fetched data:", data);
-
-          const formattedData = data.map((post) => ({
-            id: post.postId, 
-            title: post.title, 
-            author: post.user?.username || "Deleted User",
-            content: post.content,
-            topic: post.subject?.type || "General",
-            upvotes: post.likes || 0, 
-            comments: post.comments?.length || 0, 
-            timestamp: new Date(post.datetime), 
-            timeAgo: moment(post.datetime).fromNow(), 
-          }));
-      
-          setPosts(formattedData);
-        
-        } catch (error) {
-          console.error("Error fetching posts:", error);
-        }
-      };
-
       fetchPosts();
       fetchUserData();
     }, [])
@@ -116,14 +124,44 @@ const Feed = () => {
       case 'most-liked':
         sortedPosts.sort((a, b) => b.upvotes - a.upvotes);
         break;
-      case 'topic':
-        sortedPosts.sort((a, b) => a.topic.localeCompare(b.topic));
+      case 'rating':
+        sortedPosts.sort((a, b) => b.rating - (a.rating));
         break;
       default:
         break;
     }
     setPosts(sortedPosts);
     setSelectedSort(sortOption);
+  };
+
+  const handleLike = async (postId: number, liked: boolean) => {
+    try {
+      const post = await fetchPostById(postId);
+      console.log(post.likes, liked);
+  
+      let curLikes = post.likes;
+      if (curLikes == null) {
+        curLikes = 1;
+      } else {
+        curLikes += liked ? -1 : 1;
+      }
+
+      const updatedPost = {
+        ...post,
+        likes: curLikes,
+      };
+  
+      await updatePost(postId, updatedPost);
+  
+      fetchPosts();
+  
+      setLikedState((prev) => ({
+        ...prev,
+        [postId]: !liked,
+      }));
+    } catch (error) {
+      console.error(`Error handling like for post ID ${postId}:`, error);
+    }
   };
 
   return (
@@ -141,7 +179,7 @@ const Feed = () => {
             <Picker.Item label="Newest" value="newest" />
             <Picker.Item label="Oldest" value="oldest" />
             <Picker.Item label="Most Liked" value="most-liked" />
-            <Picker.Item label="Favorites" value="topic" />
+            <Picker.Item label="Rating" value="rating" />
           </Picker>
         </View>
         <View style={styles.postsContainer}>
@@ -153,19 +191,28 @@ const Feed = () => {
               <View style={styles.postContent}>
                 <View style={styles.postDetails}>
                   <Text style={styles.postMeta}>
-                    {post.topic} • Posted by {post.author} {post.timeAgo}
+                    {post.topic} • {post.subjectTitle} • Posted by {post.author} {post.timeAgo}
                   </Text>
                   <Text style={styles.postTitle}>{post.title}</Text>
                   <Text style={styles.postContentText}>{post.content}</Text>
+                  <View style={{ marginTop: 8 }}>
+                    <StarRating rating={post.rating} />
+                  </View>
                   <View style={styles.postActions}>
-                    <TouchableOpacity style={styles.actionButton}>
-                      <Ionicons name="thumbs-up-outline" size={16} color="gray" />
-                      <Text style={styles.actionText}>Like amount</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.actionButton}>
-                      <Ionicons name="thumbs-down-outline" size={16} color="gray" />
-                      <Text style={styles.actionText}>Dislike amount</Text>
-                    </TouchableOpacity>
+                  <TouchableOpacity
+                        style={[styles.actionButton, likedState[post.id] && styles.likedButton]}
+                        onPress={() => handleLike(post.id, likedState[post.id] || false)}
+                      >
+                        <Ionicons
+                          name="thumbs-up-outline"
+                          size={16}
+                          color={likedState[post.id] ? 'blue' : 'gray'}
+                        />
+                        <Text style={[styles.actionText, likedState[post.id] && { color: 'blue' }]}>
+                          {post.upvotes} Likes
+                        </Text>
+                      </TouchableOpacity>
+   
                     <TouchableOpacity style={styles.actionButton} 
                       onPress={() => {
                         router.push(`/comments?post=${post.id}`);
@@ -269,6 +316,9 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: 'gray',
     marginLeft: 4,
+  },
+  likedButton: {
+    borderColor: 'blue',
   },
 });
 

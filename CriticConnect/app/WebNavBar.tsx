@@ -29,7 +29,7 @@ const WebNavBar = ({username}) => {
         <View style={styles.header}>
           <View style={styles.headerContent}>
             <View style={styles.navContainer}>
-                <TouchableOpacity style={[styles.logoContainer, activeCategory === 'feed' && styles.logoContainer]} onPress={() => setActiveCategory('feed')}>
+                <TouchableOpacity style={[styles.logoContainer, activeCategory === 'feed' && styles.logoContainer]} onPress={() => router.push('/feed')}>
                     <Text style={styles.logoText}>CriticConnect</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={[styles.catButton, activeCategory === 'Games' && styles.activeCatButton]} onPress={() => setActiveCategory('Games')}>

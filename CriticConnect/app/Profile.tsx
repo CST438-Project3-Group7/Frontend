@@ -6,6 +6,7 @@ import moment from 'moment';
 import { router,useFocusEffect } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage'; 
 import { Ionicons } from '@expo/vector-icons';
+import StarRating from '@/components/StarRating';
 
 interface Post {
   id: number;
@@ -17,6 +18,9 @@ interface Post {
   comments: number;
   timestamp: Date;
   timeAgo: string;
+  rating: number;
+  subject: string;
+  subjectTitle: string;
 }
 
 const Profile = () => {
@@ -88,6 +92,14 @@ const Profile = () => {
 
       const fetchPosts = async () => {
         try {
+
+          const userId = await AsyncStorage.getItem('userId');
+          if (!userId) {
+            console.error("No user ID found in AsyncStorage");
+            setUser(null);
+            return;
+          }
+
           const response = await fetch(`https://criticconnect-386d21b2b7d1.herokuapp.com/api/posts/user/${userId}`, {
             method: 'GET',
             headers: {
@@ -108,6 +120,8 @@ const Profile = () => {
             comments: post.comments?.length || 0, 
             timestamp: new Date(post.datetime), 
             timeAgo: moment(post.datetime).fromNow(), 
+            rating: post.dislikes,
+            subjectTitle: post.subject?.title || "General"
           }));
       
           setPosts(formattedData);
@@ -134,8 +148,8 @@ const Profile = () => {
       case 'most-liked':
         sortedPosts.sort((a, b) => b.upvotes - a.upvotes);
         break;
-      case 'subject':
-        sortedPosts.sort((a, b) => a.subject.localeCompare(b.subject));
+      case 'rating':
+        sortedPosts.sort((a, b) => b.rating - a.rating);
         break;
       default:
         break;
@@ -227,16 +241,20 @@ const Profile = () => {
     <View style={styles.container}>
       <WebNavBar username={user?.username || "Guest"} />
       <ScrollView style={styles.content}>
-          <Text style={styles.title}>{user?.username || "Guest"}'s Posts</Text>
-          <TouchableOpacity style={styles.profileActions} onPress={() => router.push('/feed')}>
+          <Text style={styles.title}>{user?.username || "Guest"}'s Profile</Text>
+          {/* <TouchableOpacity style={styles.profileActions} onPress={() => router.push('/feed')}>
             <Text>Back to Feed</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity style={styles.profileActions} onPress={() => setIsModalVisible(true)}>
             <Text style={styles.editProfileButtonText}>Edit Profile</Text>
             <Ionicons name="pencil" size={24} color="black" />
             </TouchableOpacity>
-          <View style={styles.sortContainer}>
-          <Text style={{ fontSize: 16}}>Sort by </Text>
+        <View style={styles.horizontalLine}/>
+
+        <View style={styles.sortContainer}>
+          <Text style={styles.title}>Posts</Text>
+          <View style={styles.sortWrapper}>
+            <Text style={styles.sortText}>Sort by</Text>
             <Picker
               selectedValue={selectedSort}
               style={styles.sortDropDown}
@@ -245,10 +263,10 @@ const Profile = () => {
               <Picker.Item label="Newest" value="newest" />
               <Picker.Item label="Oldest" value="oldest" />
               <Picker.Item label="Most Liked" value="most-liked" />
-              <Picker.Item label="Subreddit" value="subreddit" />
+              <Picker.Item label="Rating" value="rating" />
             </Picker>
-          </View>
-        <View style={styles.horizontalLine}/>
+            </View>
+        </View>
         <View style={styles.postContainer}>
         {posts.length === 0 ? (
           <Text>No posts available</Text>
@@ -258,19 +276,22 @@ const Profile = () => {
               <View style={styles.postContent}>
                 <View style={styles.postDetails}>
                   <Text style={styles.postMeta}>
-                    {post.subreddit} • Posted by u/{post.author} {post.timeAgo}
+                    {post.subject} •  {post.subjectTitle} • Posted by u/{post.author} {post.timeAgo}
                   </Text>
                   <Text style={styles.postTitle}>{post.title}</Text>
                   <Text style={styles.postContentText}>{post.content}</Text>
+                  <View style={{ marginTop: 8 }}>
+                    <StarRating rating={post.rating} />
+                  </View>
                   <View style={styles.postActions}>
                     <TouchableOpacity style={styles.actionButton}>
                       <Ionicons name="thumbs-up-outline" size={16} color="gray" />
-                      <Text style={styles.actionText}>Like amount</Text>
+                      <Text style={styles.actionText}>{post.upvotes} Likes</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.actionButton}>
+                    {/* <TouchableOpacity style={styles.actionButton}>
                       <Ionicons name="thumbs-down-outline" size={16} color="gray" />
                       <Text style={styles.actionText}>Dislike amount</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                     <TouchableOpacity style={styles.actionButton}>
                       <Ionicons name="chatbubble-outline" size={16} color="gray" />
                       <Text style={styles.actionText}>{post.comments} Comments</Text>
@@ -415,9 +436,15 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   sortContainer: {
-    flex:1,
     flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between', 
     marginTop: 15,
+    marginBottom: 15,
+  },
+  sortWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   sortDropDown: {
     height: 40,
@@ -623,6 +650,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  sortText: {
+    fontSize: 16,
+    marginRight: 8,
+  },
+  
   modalContainer: {
     flex: 1,
     justifyContent: 'center',

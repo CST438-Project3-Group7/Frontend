@@ -1,0 +1,55 @@
+# React Native
+node_modules/
+npm-debug.log
+yarn-error.log
+.env
+.env.local
+.env.*.local
+
+# Expo
+.expo/
+.expo-shared/
+
+# macOS
+.DS_Store
+
+# Logs
+logs/
+*.log
+*.log.*
+
+# Android
+/android/.gradle/
+/android/.idea/
+/android/local.properties
+/android/app/build/
+/android/.settings/
+/android/*.iml
+
+# iOS
+/ios/Pods/
+/ios/Podfile.lock
+/ios/build/
+/ios/*.xcworkspace
+/ios/*.xcodeproj
+/ios/*.xcuserdatad
+/ios/*.xcuserdata
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+
+# IntelliJ/WebStorm/IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# Miscellaneous
+/coverage/
+*.bak
+*.swp
+*.tmp

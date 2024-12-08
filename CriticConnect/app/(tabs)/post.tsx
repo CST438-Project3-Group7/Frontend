@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router, useFocusEffect } from "expo-router";
+import Rating from "@/components/Rating";
 
 interface User {
   userId: number;
@@ -57,6 +58,7 @@ const PostForm: React.FC = () => {
     comments: [],
     datetime: new Date().toISOString(),
   });
+
 
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [newSubject, setNewSubject] = useState<Subject>({
@@ -148,6 +150,17 @@ const PostForm: React.FC = () => {
     }
   };
 
+  const [rating, setRating] = useState(0);
+
+  const handleRatingChange = (newRating: number) => {
+    setRating(newRating);
+
+    setPost((prevPost) => ({
+      ...prevPost,
+      dislikes: newRating, 
+    }));
+  };
+
   // Submit post
   const handleSubmit = async () => {
     try {
@@ -155,7 +168,13 @@ const PostForm: React.FC = () => {
       const date = new Date(now);
       const isoDate = date.toISOString().split(".")[0];
 
-      const postToSubmit = { ...post, datetime: isoDate, likes: 0, dislikes: 0 };
+      console.log("dislikes + : " + rating);
+      
+      const postToSubmit = { ...post, datetime: isoDate, likes: 0};
+      console.log("Post to submit:", postToSubmit);
+
+      console.log("Post to submit:", post);
+
 
       const response = await fetch(
         "https://criticconnect-386d21b2b7d1.herokuapp.com/api/posts",
@@ -222,6 +241,13 @@ const PostForm: React.FC = () => {
           onChangeText={(text) => setPost({ ...post, content: text })}
         />
       </View>
+
+      <View style={styles.formGroup}>
+        <Text>Rating:</Text>
+        <Rating rating={rating} onChange={handleRatingChange} />
+      </View>
+
+
       <View style={styles.formGroup}>
         <Text>Subject:</Text>
         <Picker
