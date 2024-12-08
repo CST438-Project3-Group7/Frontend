@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Modal, TextInput, Button, TouchableOpacity } from 'react-native';
-import { useLocalSearchParams, useFocusEffect } from 'expo-router';
+import { View, Text, StyleSheet, ScrollView, Modal, TextInput, Button, TouchableOpacity, Pressable } from 'react-native';
+import { useLocalSearchParams, useFocusEffect, router } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Comments = () => {
@@ -100,6 +100,9 @@ const Comments = () => {
 
   return (
     <View style={{ flex: 1 }}>
+     <Pressable onPress={() => router.push("/feed")} style={styles.backButton}>
+        <Text style={styles.backButtonText}>Back</Text>
+    </Pressable>
       <ScrollView style={styles.container}>
         {/* Display the Post details */}
         {postData && (
@@ -243,6 +246,19 @@ const styles = StyleSheet.create({
   modalButtons: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  backButton: {
+    backgroundColor: '#007BFF',
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    margin: 10,
+    alignSelf: 'flex-start',
+  },
+  backButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 
