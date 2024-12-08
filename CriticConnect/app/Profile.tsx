@@ -146,8 +146,8 @@ const Profile = () => {
       case 'most-liked':
         sortedPosts.sort((a, b) => b.upvotes - a.upvotes);
         break;
-      case 'subject':
-        sortedPosts.sort((a, b) => a.subject.localeCompare(b.subject));
+      case 'rating':
+        sortedPosts.sort((a, b) => b.rating - a.rating);
         break;
       default:
         break;
@@ -261,7 +261,7 @@ const Profile = () => {
               <Picker.Item label="Newest" value="newest" />
               <Picker.Item label="Oldest" value="oldest" />
               <Picker.Item label="Most Liked" value="most-liked" />
-              <Picker.Item label="Subreddit" value="subreddit" />
+              <Picker.Item label="Rating" value="rating" />
             </Picker>
             </View>
         </View>

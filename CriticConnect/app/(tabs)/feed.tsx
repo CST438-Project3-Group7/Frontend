@@ -122,8 +122,8 @@ const Feed = () => {
       case 'most-liked':
         sortedPosts.sort((a, b) => b.upvotes - a.upvotes);
         break;
-      case 'topic':
-        sortedPosts.sort((a, b) => a.topic.localeCompare(b.topic));
+      case 'rating':
+        sortedPosts.sort((a, b) => b.rating - (a.rating));
         break;
       default:
         break;
@@ -177,7 +177,7 @@ const Feed = () => {
             <Picker.Item label="Newest" value="newest" />
             <Picker.Item label="Oldest" value="oldest" />
             <Picker.Item label="Most Liked" value="most-liked" />
-            <Picker.Item label="Favorites" value="topic" />
+            <Picker.Item label="Rating" value="rating" />
           </Picker>
         </View>
         <View style={styles.postsContainer}>
