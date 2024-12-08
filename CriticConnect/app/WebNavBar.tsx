@@ -33,17 +33,17 @@ const WebNavBar = ({username}) => {
                     <Text style={styles.logoText}>CriticConnect</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={[styles.catButton, activeCategory === 'Games' && styles.activeCatButton]} onPress={() => setActiveCategory('Games')}>
-                    <Text style={styles.catButtonText}>Games</Text>
+                    <Text style={styles.catButtonText}>Game</Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
                     style={[styles.catButton, activeCategory === 'Film' && styles.activeCatButton]} 
                     onPress={() => setActiveCategory('Film')}>
-                    <Text style={styles.catButtonText}>Movies</Text>
+                    <Text style={styles.catButtonText}>Film</Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
                     style={[styles.catButton, activeCategory === 'Music' && styles.activeCatButton]} 
                     onPress={() => setActiveCategory('Music')}>
-                    <Text style={styles.catButtonText}>Music</Text>
+                    <Text style={styles.catButtonText}>Book</Text>
                 </TouchableOpacity>
             </View>
             <View style={styles.searchContainer}>
