@@ -1,13 +1,20 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
-const SelectFavorites = ({ userId, isGuest }) => {
+const SelectFavorites = () => {
   const [favorites, setFavorites] = useState([]);
 
   // Function to fetch user's current favorite topics from the favorites table
   const fetchUserFavorites = async () => {
     try {
-      const response = await fetch(`https://criticconnect-386d21b2b7d1.herokuapp.com/api/favorites/${userId}`, {
+
+      const userId = await AsyncStorage.getItem('userId');
+      if (!userId) {
+        console.error("No user ID found in AsyncStorage");
+        return;
+      }
+      const response = await fetch(`https://criticconnect-386d21b2b7d1.herokuapp.com/api/favorites/user/${userId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -20,9 +27,9 @@ const SelectFavorites = ({ userId, isGuest }) => {
       }
 
       const data = await response.json();
-      const userFavorites = data.map(favorite => favorite.favorite); // Extract the 'favorite' field from each row
-      console.log("User favorites fetched:", userFavorites);
-      setFavorites(userFavorites);
+  
+      console.log("User favorites fetched:", data);
+      return data
     } catch (error) {
       console.error("Error retrieving user favorites:", error);
     }
@@ -81,18 +88,11 @@ const SelectFavorites = ({ userId, isGuest }) => {
 
   // Fetch the user's favorites when the component mounts
   useEffect(() => {
-    if (!isGuest) {
       fetchUserFavorites();
-    }
-  }, [userId, isGuest]);
 
-  if (userId != null) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.header}>Create an account to add favorites!</Text>
-      </View>
-    );
-  }
+  }, []);
+
+
 
   return (
     <View style={styles.container}>
