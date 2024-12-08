@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Picker } from 're
 import { Ionicons } from '@expo/vector-icons';
 import WebNavBar from '../WebNavBar';
 import moment from 'moment';
-import {router, useFocusEffect } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage'; 
 import StarRating from '@/components/StarRating';
 import { fetchPostById, updatePost } from '@/utils/posts';
@@ -212,11 +212,11 @@ const Feed = () => {
                           {post.upvotes} Likes
                         </Text>
                       </TouchableOpacity>
-                    {/* <TouchableOpacity style={styles.actionButton}>
-                      <Ionicons name="thumbs-down-outline" size={16} color="gray" />
-                      <Text style={styles.actionText}>{post.rating}Dislike amount</Text>
-                    </TouchableOpacity> */}
-                    <TouchableOpacity style={styles.actionButton}>
+   
+                    <TouchableOpacity style={styles.actionButton} 
+                      onPress={() => {
+                        router.push(`/comments?post=${post.id}`);
+                      }}>
                       <Ionicons name="chatbubble-outline" size={16} color="gray" />
                       <Text style={styles.actionText}>{post.comments} Comments</Text>
                     </TouchableOpacity>

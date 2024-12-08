@@ -9,6 +9,7 @@ import {
   StyleSheet,
   ScrollView,
   Alert,
+  TouchableOpacity,
 } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router, useFocusEffect } from "expo-router";
@@ -90,13 +91,10 @@ const PostForm: React.FC = () => {
       }
 
       const userData = await response.json();
-      console.log("User data fetched:", userData);
-
       setPost((prevPost) => ({
-      ...prevPost,
-      user: userData,
-    }));
-      console.log("post: ", post);
+        ...prevPost,
+        user: userData,
+      }));
     } catch (error) {
       console.error("Error retrieving user data:", error);
       Alert.alert("Error", "Failed to fetch user data.");
@@ -177,6 +175,7 @@ const PostForm: React.FC = () => {
 
       console.log("Post to submit:", post);
 
+
       const response = await fetch(
         "https://criticconnect-386d21b2b7d1.herokuapp.com/api/posts",
         {
@@ -207,13 +206,7 @@ const PostForm: React.FC = () => {
         });
         router.push('/feed');
       } else {
-        console.log("Before alert");                
-        try {
-          Alert.alert("Error", "Failed to create post.");
-        } catch (error) {
-          console.error("Error triggering alert:", error);
-        }
-        console.log("After alert");
+        Alert.alert("Error", "Failed to create post.");
       }
     } catch (error) {
       console.error("Error submitting post:", error);
@@ -221,18 +214,12 @@ const PostForm: React.FC = () => {
     }
   };
 
-
   useFocusEffect(
     React.useCallback(() => {
-    fetchSubjects();
-    fetchUserData(); // Fetch user data on component mount
-  }, []));
-
-  /*
-  useEffect(() => {
-    console.log("Post updated:", post);
-  }, [post]);
-  */
+      fetchSubjects();
+      fetchUserData(); // Fetch user data on component mount
+    }, [])
+  );
 
   return (
     <ScrollView style={styles.container}>
@@ -269,10 +256,7 @@ const PostForm: React.FC = () => {
             if (value === "new") {
               setShowModal(true);
             } else {
-              console.log("subjects", subjects);
               const selectedSubject = subjects.find((s) => s.subjectId == value);
-              console.dir(value);
-              console.log("selectedSubject", selectedSubject);
               if (selectedSubject) setPost({ ...post, subject: selectedSubject });
             }
           }}
@@ -282,7 +266,7 @@ const PostForm: React.FC = () => {
             <Picker.Item
               key={subject.subjectId}
               label={`${subject.title} (${subject.year})`}
-              value={subject.subjectId}              
+              value={subject.subjectId}
             />
           ))}
           <Picker.Item label="Create new subject" value="new" />
@@ -295,7 +279,7 @@ const PostForm: React.FC = () => {
         <Modal visible={showModal} animationType="slide" transparent>
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
-              <Text>Create New Subject</Text>
+              <Text style={styles.modalHeader}>Create New Subject</Text>
               <TextInput
                 style={styles.input}
                 placeholder="Title"
@@ -309,12 +293,22 @@ const PostForm: React.FC = () => {
                 value={String(newSubject.year)}
                 onChangeText={(text) => setNewSubject({ ...newSubject, year: Number(text) })}
               />
-              <TextInput
-                style={styles.input}
-                placeholder="Type"
-                value={newSubject.type}
-                onChangeText={(text) => setNewSubject({ ...newSubject, type: text })}
-              />
+              <Text style={styles.radioHeader}>Type:</Text>
+              {["Film", "Book", "Video_Game"].map((type) => (
+                <TouchableOpacity
+                  key={type}
+                  style={styles.radioContainer}
+                  onPress={() => setNewSubject({ ...newSubject, type })}
+                >
+                  <View
+                    style={[
+                      styles.radioCircle,
+                      newSubject.type === type && styles.radioCircleSelected,
+                    ]}
+                  />
+                  <Text style={styles.radioLabel}>{type.replace("_", " ")}</Text>
+                </TouchableOpacity>
+              ))}
               <Button title="Create Subject" onPress={handleNewSubjectSubmit} />
               <Button title="Cancel" onPress={() => setShowModal(false)} />
             </View>
@@ -333,6 +327,12 @@ const styles = StyleSheet.create({
   textarea: { borderWidth: 1, borderColor: "#ccc", padding: 10, height: 100, textAlignVertical: "top" },
   modalContainer: { flex: 1, justifyContent: "center", backgroundColor: "rgba(0,0,0,0.5)" },
   modalContent: { backgroundColor: "white", padding: 20, margin: 20, borderRadius: 10 },
+  modalHeader: { fontSize: 20, fontWeight: "bold", marginBottom: 10 },
+  radioHeader: { fontSize: 16, marginVertical: 10 },
+  radioContainer: { flexDirection: "row", alignItems: "center", marginBottom: 10 },
+  radioCircle: { height: 20, width: 20, borderRadius: 10, borderWidth: 2, borderColor: "#ccc", marginRight: 10 },
+  radioCircleSelected: { borderColor: "#007BFF", backgroundColor: "#007BFF" },
+  radioLabel: { fontSize: 16 },
 });
 
 export default PostForm;
