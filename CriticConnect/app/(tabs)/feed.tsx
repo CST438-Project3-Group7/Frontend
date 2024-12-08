@@ -22,6 +22,7 @@ interface Post {
   timeAgo: string;
   rating: number;
   liked: boolean;
+  subjectTitle: string;
 }
 
 const Feed = () => {
@@ -59,6 +60,7 @@ const Feed = () => {
         timeAgo: moment(post.datetime).fromNow(), 
         rating: post.dislikes,
         liked: false,
+        subjectTitle: post.subject?.title || "General",
       }));
   
       setPosts(formattedData);
@@ -189,7 +191,7 @@ const Feed = () => {
               <View style={styles.postContent}>
                 <View style={styles.postDetails}>
                   <Text style={styles.postMeta}>
-                    {post.topic} • Posted by {post.author} {post.timeAgo}
+                    {post.topic} • {post.subjectTitle} • Posted by {post.author} {post.timeAgo}
                   </Text>
                   <Text style={styles.postTitle}>{post.title}</Text>
                   <Text style={styles.postContentText}>{post.content}</Text>

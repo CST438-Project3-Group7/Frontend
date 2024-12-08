@@ -20,6 +20,7 @@ interface Post {
   timeAgo: string;
   rating: number;
   subject: string;
+  subjectTitle: string;
 }
 
 const Profile = () => {
@@ -120,6 +121,7 @@ const Profile = () => {
             timestamp: new Date(post.datetime), 
             timeAgo: moment(post.datetime).fromNow(), 
             rating: post.dislikes,
+            subjectTitle: post.subject?.title || "General"
           }));
       
           setPosts(formattedData);
@@ -274,7 +276,7 @@ const Profile = () => {
               <View style={styles.postContent}>
                 <View style={styles.postDetails}>
                   <Text style={styles.postMeta}>
-                    {post.subject} • Posted by u/{post.author} {post.timeAgo}
+                    {post.subject} •  {post.subjectTitle} • Posted by u/{post.author} {post.timeAgo}
                   </Text>
                   <Text style={styles.postTitle}>{post.title}</Text>
                   <Text style={styles.postContentText}>{post.content}</Text>
