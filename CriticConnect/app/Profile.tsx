@@ -19,6 +19,7 @@ interface Post {
   timestamp: Date;
   timeAgo: string;
   rating: number;
+  subject: string;
 }
 
 const Profile = () => {
@@ -238,16 +239,20 @@ const Profile = () => {
     <View style={styles.container}>
       <WebNavBar username={user?.username || "Guest"} />
       <ScrollView style={styles.content}>
-          <Text style={styles.title}>{user?.username || "Guest"}'s Posts</Text>
-          <TouchableOpacity style={styles.profileActions} onPress={() => router.push('/feed')}>
+          <Text style={styles.title}>{user?.username || "Guest"}'s Profile</Text>
+          {/* <TouchableOpacity style={styles.profileActions} onPress={() => router.push('/feed')}>
             <Text>Back to Feed</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity style={styles.profileActions} onPress={() => setIsModalVisible(true)}>
             <Text style={styles.editProfileButtonText}>Edit Profile</Text>
             <Ionicons name="pencil" size={24} color="black" />
             </TouchableOpacity>
-          <View style={styles.sortContainer}>
-          <Text style={{ fontSize: 16}}>Sort by </Text>
+        <View style={styles.horizontalLine}/>
+
+        <View style={styles.sortContainer}>
+          <Text style={styles.title}>Posts</Text>
+          <View style={styles.sortWrapper}>
+            <Text style={styles.sortText}>Sort by</Text>
             <Picker
               selectedValue={selectedSort}
               style={styles.sortDropDown}
@@ -258,8 +263,8 @@ const Profile = () => {
               <Picker.Item label="Most Liked" value="most-liked" />
               <Picker.Item label="Subreddit" value="subreddit" />
             </Picker>
-          </View>
-        <View style={styles.horizontalLine}/>
+            </View>
+        </View>
         <View style={styles.postContainer}>
         {posts.length === 0 ? (
           <Text>No posts available</Text>
@@ -269,7 +274,7 @@ const Profile = () => {
               <View style={styles.postContent}>
                 <View style={styles.postDetails}>
                   <Text style={styles.postMeta}>
-                    {post.subreddit} • Posted by u/{post.author} {post.timeAgo}
+                    {post.subject} • Posted by u/{post.author} {post.timeAgo}
                   </Text>
                   <Text style={styles.postTitle}>{post.title}</Text>
                   <Text style={styles.postContentText}>{post.content}</Text>
@@ -429,9 +434,15 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   sortContainer: {
-    flex:1,
     flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between', 
     marginTop: 15,
+    marginBottom: 15,
+  },
+  sortWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   sortDropDown: {
     height: 40,
@@ -637,6 +648,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  sortText: {
+    fontSize: 16,
+    marginRight: 8,
+  },
+  
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
