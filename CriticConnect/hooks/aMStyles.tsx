@@ -6,6 +6,7 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       justifyContent: 'space-between',
       marginBottom: 20,
+      paddingTop: 50,
     },
     navItem: {
       padding: 10,
@@ -87,11 +88,16 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       padding: 16,
     },
+    buttonContent: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 5
+    },
     googleButton: {
       flexDirection: 'row',
       alignItems: 'center',
       backgroundColor: 'black', 
-      paddingVertical: 12,
+      paddingVertical: 15,
       paddingHorizontal: 24,
       borderRadius: 30,
       shadowColor: '#000',
@@ -109,6 +115,18 @@ const styles = StyleSheet.create({
       color: '#fff',
       fontFamily: 'LexendDeca',
       fontStyle: 'normal',
+    },
+    guestButton: {
+      backgroundColor: 'black',
+      borderRadius: 25,
+      paddingVertical: 10,
+      paddingHorizontal: 20,
+      alignItems: 'center',
+    },
+    guestButtonText: {
+      color: 'white',
+      fontSize: 16,
+      fontWeight: 'bold',
     },
   });
 export default styles;

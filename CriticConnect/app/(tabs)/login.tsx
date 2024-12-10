@@ -9,7 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 WebBrowser.maybeCompleteAuthSession();
 
-const login = () => {
+const Login = () => {
 
 
   const [username, setUsername] = useState('');
@@ -39,20 +39,27 @@ const login = () => {
         console.log("user info is", check)
         if(check == null) {
           // user doesnt exist in our db
-          router.push('/signup');
+          // router.push('/signup');
+          console.log("User data:", user);
+          console.log("User token, user does not exists if statement", user.accessToken);
         }
         else {
           // user exists
           await AsyncStorage.setItem("@user", JSON.stringify(check));
-          navigator.navigate('(tabs)')
+          // router.push('/feed');
+          console.log("User data:", user);
+          console.log("User token, user exists if statement", data.accessToken);
         }
 
+      }else{
+        //auto log in if the user exists in our database as a normal user
+        console.log("Google sign in failed");
       }
     }
     else
     {
       // if the user has signed in
-      router.push('/feed');
+      // router.push('/feed');
     }
   }
 
@@ -81,38 +88,6 @@ const login = () => {
     handleGoogleSignIn();
   }, [response]);
 
-  async function handleDatabaseSignIn() {
-    let user = await AsyncStorage.getItem("@userId");
-    console.log("local storage currently has: ", JSON.parse(user));
-    // if the user hasnt signed in
-    if(!user)
-    {
-      if(response?.type === "success")
-      {
-        await getGoogleInfo(response.authentication?.accessToken);
-        user = await AsyncStorage.getItem("@user");
-        user = JSON.parse(user);
-        console.log('user info for checking the database is ', user);
-        let check = await getUserInfoDb(user.id);
-        console.log("user info is", check)
-        if(check == null) {
-          // user doesnt exist in our db
-          router.push('/signup');
-        }
-        else {
-          // user exists
-          await AsyncStorage.setItem("@user", JSON.stringify(check));
-          navigator.navigate('(tabs)')
-        }
-
-      }
-    }
-    else
-    {
-      // if the user has signed in
-      router.push('/feed');
-    }
-  }
 
   function handleLogin() {
     if (username === '' || password === '') {
@@ -262,13 +237,21 @@ const login = () => {
         <View>
         {/* Google Button */}
         {Component}
+        <View style={styles.link}>
+          <Text>or</Text>
+        </View>
+        <View style={styles.link}>
+          <TouchableOpacity style={styles.guestButton} onPress={() => router.push('/feed')}>
+            <Text style={styles.guestButtonText}>Continue as Guest</Text>
+          </TouchableOpacity>
+        </View>
         </View>
       </View>
       </View>
   );
 };
 
-export default login;
+export default Login;
 
 
 const errorStyle = StyleSheet.create({

@@ -1,14 +1,15 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity,TextInput, ScrollView } from 'react-native';
 import {router} from 'expo-router';
+import { useNavigation } from '@react-navigation/native';
 
-const home = () => {
+const Home = () => {
     return (
         <View style={styles.container}>
             <View style={styles.formContainer}>
                 <Text style={styles.label}>Welcome to CriticConnect!</Text>
                 <Text style={styles.label}>Your hub for movie, game, and song reviews.</Text>
-                <TouchableOpacity style={styles.submitButton} onPress={() => router.push('/signup')}>
+                <TouchableOpacity style={styles.submitButton} onPress={() => router.push('signup')}>
                     <Text style={styles.submitButtonText}>Get Started</Text>
                 </TouchableOpacity>
             </View>
@@ -45,4 +46,4 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
 });
-export default home;
+export default Home;

@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Modal } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Modal,Platform } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useNavigation } from '@react-navigation/native';
 import WebNavBar from './WebNavBar';
+import PhoneNavBar from './PhoneNavBar';
 import moment from 'moment';
 import { router, useFocusEffect } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
+import StarRating from '@/components/StarRating';
 
 interface Post {
   id: number;
@@ -18,6 +20,9 @@ interface Post {
   comments: number;
   timestamp: Date;
   timeAgo: string;
+  rating: number;
+  subject: string;
+  subjectTitle: string;
 }
 
 const Profile = () => {
@@ -31,6 +36,7 @@ const Profile = () => {
     confirmNewPassword: '',
     roles: 'USER',
   });
+  const [dropdownVisible, setDropdownVisible] = useState(false);
   
   const handleInputChange = (field, value) => {
     setProfileData((prevData) => ({ ...prevData, [field]: value }));
@@ -89,6 +95,14 @@ const Profile = () => {
 
       const fetchPosts = async () => {
         try {
+
+          const userId = await AsyncStorage.getItem('userId');
+          if (!userId) {
+            console.error("No user ID found in AsyncStorage");
+            setUser(null);
+            return;
+          }
+
           const response = await fetch(`https://criticconnect-386d21b2b7d1.herokuapp.com/api/posts/user/${userId}`, {
             method: 'GET',
             headers: {
@@ -109,6 +123,8 @@ const Profile = () => {
             comments: post.comments?.length || 0, 
             timestamp: new Date(post.datetime), 
             timeAgo: moment(post.datetime).fromNow(), 
+            rating: post.dislikes,
+            subjectTitle: post.subject?.title || "General"
           }));
       
           setPosts(formattedData);
@@ -135,8 +151,8 @@ const Profile = () => {
       case 'most-liked':
         sortedPosts.sort((a, b) => b.upvotes - a.upvotes);
         break;
-      case 'subject':
-        sortedPosts.sort((a, b) => a.subject.localeCompare(b.subject));
+      case 'rating':
+        sortedPosts.sort((a, b) => b.rating - a.rating);
         break;
       default:
         break;
@@ -226,9 +242,13 @@ const Profile = () => {
 
   return (
     <View style={styles.container}>
+      {Platform.OS === 'web' ? (
       <WebNavBar username={user?.username || "Guest"} />
+      ) : (
+      <PhoneNavBar username={user?.username || "Guest"} />
+      )}
       <ScrollView style={styles.content}>
-          <Text style={styles.title}>{user?.username || "Guest"}'s Posts</Text>
+          <Text style={styles.title}>{user?.username || "Guest"}'s Profile</Text>
           <TouchableOpacity style={styles.profileActions} onPress={() => router.push('/feed')}>
             <Text>Back to Feed</Text>
           </TouchableOpacity>
@@ -236,20 +256,29 @@ const Profile = () => {
             <Text style={styles.editProfileButtonText}>Edit Profile</Text>
             <Ionicons name="pencil" size={24} color="black" />
             </TouchableOpacity>
-          <View style={styles.sortContainer}>
-          <Text style={{ fontSize: 16}}>Sort by </Text>
-            <Picker
-              selectedValue={selectedSort}
-              style={styles.sortDropDown}
-              onValueChange={(itemValue) => sortPosts(itemValue)}
-            >
-              <Picker.Item label="Newest" value="newest" />
-              <Picker.Item label="Oldest" value="oldest" />
-              <Picker.Item label="Most Liked" value="most-liked" />
-              <Picker.Item label="Subreddit" value="subreddit" />
-            </Picker>
-          </View>
         <View style={styles.horizontalLine}/>
+        <View style={styles.sortContainer}>
+            <TouchableOpacity onPress={() => setDropdownVisible(!dropdownVisible)} style={styles.sortButton}>
+              <Text style={styles.sortButtonText}>Sort by: {selectedSort}</Text>
+              <Ionicons name="chevron-down-outline" size={16} color="black" />
+            </TouchableOpacity>
+            {dropdownVisible && (
+              <View style={styles.dropdown}>
+                <TouchableOpacity style={styles.dropdownOption} onPress={() => sortPosts('newest')}>
+                  <Text style={styles.dropdownText}>Newest</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.dropdownOption} onPress={() => sortPosts('oldest')}>
+                  <Text style={styles.dropdownText}>Oldest</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.dropdownOption} onPress={() => sortPosts('most-liked')}>
+                  <Text style={styles.dropdownText}>Most Liked</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.dropdownOption} onPress={() => sortPosts('rating')}>
+                  <Text style={styles.dropdownText}>Rating</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </View>
         <View style={styles.postContainer}>
         {posts.length === 0 ? (
           <Text>No posts available</Text>
@@ -259,19 +288,22 @@ const Profile = () => {
               <View style={styles.postContent}>
                 <View style={styles.postDetails}>
                   <Text style={styles.postMeta}>
-                    {post.subreddit} • Posted by u/{post.author} {post.timeAgo}
+                    {post.subject} •  {post.subjectTitle} • Posted by u/{post.author} {post.timeAgo}
                   </Text>
                   <Text style={styles.postTitle}>{post.title}</Text>
                   <Text style={styles.postContentText}>{post.content}</Text>
+                  <View style={{ marginTop: 8 }}>
+                    <StarRating rating={post.rating} />
+                  </View>
                   <View style={styles.postActions}>
                     <TouchableOpacity style={styles.actionButton}>
                       <Ionicons name="thumbs-up-outline" size={16} color="gray" />
-                      <Text style={styles.actionText}>Like amount</Text>
+                      <Text style={styles.actionText}>{post.upvotes} Likes</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.actionButton}>
+                    {/* <TouchableOpacity style={styles.actionButton}>
                       <Ionicons name="thumbs-down-outline" size={16} color="gray" />
                       <Text style={styles.actionText}>Dislike amount</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                     <TouchableOpacity style={styles.actionButton}>
                       <Ionicons name="chatbubble-outline" size={16} color="gray" />
                       <Text style={styles.actionText}>{post.comments} Comments</Text>
@@ -415,16 +447,46 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 20,
   },
-  sortContainer: {
-    flex:1,
+sortContainer: {
+    position: 'relative',
+    zIndex: 1,
     flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end', // Align to the right
     marginTop: 15,
+    marginBottom: 15,
   },
-  sortDropDown: {
-    height: 40,
-    width: 150,
+  sortButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    backgroundColor: '#f1f1f1',
     borderRadius: 8,
-    paddingHorizontal: 10,
+  },
+  sortButtonText: {
+    fontSize: 16,
+    marginRight: 8,
+  },
+  dropdown: {
+    position: 'absolute',
+    top: 50,
+    right: 0, 
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3,
+  },
+  dropdownOption: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  dropdownText: {
     fontSize: 16,
   },
   horizontalLine: {
@@ -624,6 +686,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  sortText: {
+    fontSize: 16,
+    marginRight: 8,
+  },
+  
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
