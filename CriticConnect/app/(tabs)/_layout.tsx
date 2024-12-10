@@ -26,7 +26,6 @@ const TabLayout = () => {
       />
       <Tabs.Screen name="login" options={{ headerShown: false, href: null }} />
       <Tabs.Screen name="signup" options={{ headerShown: false, href: null }} />
-      <Tabs.Screen name="feed" options={{ headerShown: false }} />
       <Tabs.Screen
         name="feed"
         options={{
