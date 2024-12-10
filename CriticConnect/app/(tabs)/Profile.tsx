@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Modal, Picker } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Modal,Platform } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import { useNavigation } from '@react-navigation/native';
 import WebNavBar from './WebNavBar';
+import PhoneNavBar from './PhoneNavBar';
 import moment from 'moment';
-import { router,useFocusEffect } from 'expo-router';
-import AsyncStorage from '@react-native-async-storage/async-storage'; 
+import { router, useFocusEffect } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import StarRating from '@/components/StarRating';
 
@@ -34,6 +36,7 @@ const Profile = () => {
     confirmNewPassword: '',
     roles: 'USER',
   });
+  const [dropdownVisible, setDropdownVisible] = useState(false);
   
   const handleInputChange = (field, value) => {
     setProfileData((prevData) => ({ ...prevData, [field]: value }));
@@ -239,34 +242,43 @@ const Profile = () => {
 
   return (
     <View style={styles.container}>
+      {Platform.OS === 'web' ? (
       <WebNavBar username={user?.username || "Guest"} />
+      ) : (
+      <PhoneNavBar username={user?.username || "Guest"} />
+      )}
       <ScrollView style={styles.content}>
           <Text style={styles.title}>{user?.username || "Guest"}'s Profile</Text>
-          {/* <TouchableOpacity style={styles.profileActions} onPress={() => router.push('/feed')}>
+          <TouchableOpacity style={styles.profileActions} onPress={() => router.push('/feed')}>
             <Text>Back to Feed</Text>
-          </TouchableOpacity> */}
+          </TouchableOpacity>
           <TouchableOpacity style={styles.profileActions} onPress={() => setIsModalVisible(true)}>
             <Text style={styles.editProfileButtonText}>Edit Profile</Text>
             <Ionicons name="pencil" size={24} color="black" />
             </TouchableOpacity>
         <View style={styles.horizontalLine}/>
-
         <View style={styles.sortContainer}>
-          <Text style={styles.title}>Posts</Text>
-          <View style={styles.sortWrapper}>
-            <Text style={styles.sortText}>Sort by</Text>
-            <Picker
-              selectedValue={selectedSort}
-              style={styles.sortDropDown}
-              onValueChange={(itemValue) => sortPosts(itemValue)}
-            >
-              <Picker.Item label="Newest" value="newest" />
-              <Picker.Item label="Oldest" value="oldest" />
-              <Picker.Item label="Most Liked" value="most-liked" />
-              <Picker.Item label="Rating" value="rating" />
-            </Picker>
-            </View>
-        </View>
+            <TouchableOpacity onPress={() => setDropdownVisible(!dropdownVisible)} style={styles.sortButton}>
+              <Text style={styles.sortButtonText}>Sort by: {selectedSort}</Text>
+              <Ionicons name="chevron-down-outline" size={16} color="black" />
+            </TouchableOpacity>
+            {dropdownVisible && (
+              <View style={styles.dropdown}>
+                <TouchableOpacity style={styles.dropdownOption} onPress={() => sortPosts('newest')}>
+                  <Text style={styles.dropdownText}>Newest</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.dropdownOption} onPress={() => sortPosts('oldest')}>
+                  <Text style={styles.dropdownText}>Oldest</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.dropdownOption} onPress={() => sortPosts('most-liked')}>
+                  <Text style={styles.dropdownText}>Most Liked</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.dropdownOption} onPress={() => sortPosts('rating')}>
+                  <Text style={styles.dropdownText}>Rating</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </View>
         <View style={styles.postContainer}>
         {posts.length === 0 ? (
           <Text>No posts available</Text>
@@ -435,22 +447,46 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 20,
   },
-  sortContainer: {
+sortContainer: {
+    position: 'relative',
+    zIndex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between', 
+    justifyContent: 'flex-end', // Align to the right
     marginTop: 15,
     marginBottom: 15,
   },
-  sortWrapper: {
+  sortButton: {
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  sortDropDown: {
-    height: 40,
-    width: 150,
+    padding: 10,
+    backgroundColor: '#f1f1f1',
     borderRadius: 8,
-    paddingHorizontal: 10,
+  },
+  sortButtonText: {
+    fontSize: 16,
+    marginRight: 8,
+  },
+  dropdown: {
+    position: 'absolute',
+    top: 50,
+    right: 0, 
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3,
+  },
+  dropdownOption: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  dropdownText: {
     fontSize: 16,
   },
   horizontalLine: {

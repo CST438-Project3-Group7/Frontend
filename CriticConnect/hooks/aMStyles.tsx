@@ -6,6 +6,7 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       justifyContent: 'space-between',
       marginBottom: 20,
+      paddingTop: 50,
     },
     navItem: {
       padding: 10,
@@ -80,6 +81,52 @@ const styles = StyleSheet.create({
     linkText: {
       color: '#000',
       textDecorationLine: 'underline',
+    },
+    googleContainer:{
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: 16,
+    },
+    buttonContent: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 5
+    },
+    googleButton: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: 'black', 
+      paddingVertical: 15,
+      paddingHorizontal: 24,
+      borderRadius: 30,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+      elevation: 5,
+    },
+    googleLogo: {
+      width: 24, 
+      height: 24, 
+      marginRight: 10
+    },
+    googleButtonText: {
+      color: '#fff',
+      fontFamily: 'LexendDeca',
+      fontStyle: 'normal',
+    },
+    guestButton: {
+      backgroundColor: 'black',
+      borderRadius: 25,
+      paddingVertical: 10,
+      paddingHorizontal: 20,
+      alignItems: 'center',
+    },
+    guestButtonText: {
+      color: 'white',
+      fontSize: 16,
+      fontWeight: 'bold',
     },
   });
 export default styles;

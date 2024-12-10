@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Picker } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Platform } from 'react-native';
+import {Picker} from "@react-native-picker/picker";
 import { Ionicons } from '@expo/vector-icons';
-import WebNavBar from '../WebNavBar';
+import WebNavBar from './WebNavBar';
+import PhoneNavBar from './PhoneNavBar';
 import moment from 'moment';
 import { router, useFocusEffect } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage'; 
@@ -31,6 +33,7 @@ const Feed = () => {
   const [selectedSort, setSelectedSort] = useState('newest');
   const [user, setUser] = useState<User | null>(null);
   const [likedState, setLikedState] = useState<{ [key: number]: boolean }>({}); 
+  const [dropdownVisible, setDropdownVisible] = useState(false);
 
   interface User {
     username: string;
@@ -166,22 +169,34 @@ const Feed = () => {
 
   return (
     <View style={styles.container}>
-      <WebNavBar username={user?.username || "Guest"} />
+      {Platform.OS === 'web' ? (
+      <WebNavBar username={user?.username} />
+      ) : (
+      <PhoneNavBar username={user?.username} />
+      )}
       <ScrollView style={styles.content}>
-        
         <View style={styles.sortContainer}>
-          <Text style={{ fontSize: 16}}>Sort by    </Text>
-          <Picker
-            selectedValue={selectedSort}
-            style={{ height: 50, width: 150 }}
-            onValueChange={(itemValue) => sortPosts(itemValue)}
-          >
-            <Picker.Item label="Newest" value="newest" />
-            <Picker.Item label="Oldest" value="oldest" />
-            <Picker.Item label="Most Liked" value="most-liked" />
-            <Picker.Item label="Rating" value="rating" />
-          </Picker>
-        </View>
+            <TouchableOpacity onPress={() => setDropdownVisible(!dropdownVisible)} style={styles.sortButton}>
+              <Text style={styles.sortButtonText}>Sort by: {selectedSort}</Text>
+              <Ionicons name="chevron-down-outline" size={16} color="black" />
+            </TouchableOpacity>
+            {dropdownVisible && (
+              <View style={styles.dropdown}>
+                <TouchableOpacity style={styles.dropdownOption} onPress={() => sortPosts('newest')}>
+                  <Text style={styles.dropdownText}>Newest</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.dropdownOption} onPress={() => sortPosts('oldest')}>
+                  <Text style={styles.dropdownText}>Oldest</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.dropdownOption} onPress={() => sortPosts('most-liked')}>
+                  <Text style={styles.dropdownText}>Most Liked</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.dropdownOption} onPress={() => sortPosts('rating')}>
+                  <Text style={styles.dropdownText}>Rating</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </View>
         <View style={styles.postsContainer}>
         {posts.length === 0 ? (
           <Text>No posts available</Text>
@@ -250,8 +265,43 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   sortContainer: {
-    flex:1,
     marginBottom: 16,
+    position:'relative',
+    zIndex: 1,
+  },
+  sortButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    backgroundColor: '#f1f1f1',
+    borderRadius: 8,
+  },
+  sortButtonText: {
+    fontSize: 16,
+    marginRight: 8,
+  },
+  dropdown: {
+    position: 'absolute',
+    top: 50,
+    left: 0,
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3,
+    zIndex: 1000,
+  },
+  dropdownOption: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  dropdownText: {
+    fontSize: 16,
   },
   postsContainer: {
     width: '100%',

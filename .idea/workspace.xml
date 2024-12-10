@@ -5,14 +5,34 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="84509b63-f19a-4ab2-919a-5eccc5d00058" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CriticConnect/app/(tabs)/PhoneNavBar.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CriticConnect/app/(tabs)/comments.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CriticConnect/app/(tabs)/favorites.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CriticConnect/app/(tabs)/post.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CriticConnect/components/Rating.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CriticConnect/components/StarRating.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CriticConnect/utils/posts.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CriticConnect/app/(tabs)/Profile.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/CriticConnect/app/(tabs)/Profile.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CriticConnect/app/(tabs)/WebNavBar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/CriticConnect/app/(tabs)/WebNavBar.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CriticConnect/app/(tabs)/_layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/CriticConnect/app/(tabs)/_layout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CriticConnect/app/(tabs)/cgames.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/CriticConnect/app/(tabs)/selectfavorites.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CriticConnect/app/(tabs)/cgames.tsx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/CriticConnect/app/(tabs)/cmovies.tsx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/CriticConnect/app/(tabs)/cmusic.tsx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/CriticConnect/app/(tabs)/feed.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/CriticConnect/app/(tabs)/feed.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CriticConnect/app/(tabs)/home.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/CriticConnect/app/(tabs)/home.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CriticConnect/app/(tabs)/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CriticConnect/app/(tabs)/login.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/CriticConnect/app/(tabs)/login.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CriticConnect/app/(tabs)/signup.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/CriticConnect/app/(tabs)/signup.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CriticConnect/app/_layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/CriticConnect/app/_layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CriticConnect/components/DbFunc.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/CriticConnect/components/DbFunc.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CriticConnect/components/types.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/CriticConnect/components/types.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CriticConnect/hooks/aMStyles.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/CriticConnect/hooks/aMStyles.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CriticConnect/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/CriticConnect/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CriticConnect/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/CriticConnect/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,12 +51,12 @@
     &quot;assignee&quot;: &quot;KrispyKris905&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/CST438-Project3-Group7/Frontend.git",
-    "accountId": "7490b95c-1fdb-4d74-aaf1-bfe9848f2cad"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/CST438-Project3-Group7/Frontend.git&quot;,
+    &quot;accountId&quot;: &quot;b2db3361-d45f-4dd0-88d1-0af0754a0dd2&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 2
 }</component>
@@ -45,19 +65,19 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "RunOnceActivity.readMode.enableVisualFormatting": "true",
-    "cf.first.check.clang-format": "false",
-    "cidr.known.project.marker": "true",
-    "git-widget-placeholder": "favorites",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/crist/OneDrive/Documents/Frontend",
-    "settings.editor.selected.configurable": "AndroidSdkUpdater"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Merging WebAndNativeNavBar&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/crist/OneDrive/Documents/Frontend&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;AndroidSdkUpdater&quot;
   }
-}]]></component>
+}</component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">

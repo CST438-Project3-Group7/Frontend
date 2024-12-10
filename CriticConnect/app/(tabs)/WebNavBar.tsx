@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import {router} from 'expo-router';
@@ -7,7 +7,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const WebNavBar = ({username}) => {
     const [activeCategory, setActiveCategory] = useState('feed');
-
     const [dropdownVisible, setDropdownVisible] = useState(false);
 
     const toggleDropdown = () => {
@@ -18,7 +17,8 @@ const WebNavBar = ({username}) => {
       console.log('Logout');
       setDropdownVisible(false);
       try {
-        await AsyncStorage.removeItem('userId'); 
+        await AsyncStorage.removeItem('userId');
+        await AsyncStorage.removeItem('@user');  
         router.push('/login'); 
       } catch (error) {
         console.error('Error removing user ID from AsyncStorage:', error);
@@ -50,13 +50,27 @@ const WebNavBar = ({username}) => {
                 <TextInput style={styles.searchInput} placeholder="Search CriticConnect"/>
             </View>
             <View style={styles.navContainer}>
-                <TouchableOpacity style={styles.profileButton}  onPress={username !== "Guest" ? toggleDropdown: () => {}} >
-                    <Text style={styles.profileText}>{username}</Text>
-                    <Ionicons name="chevron-down-outline" size={16} color="black" />
-                </TouchableOpacity>
-                {dropdownVisible && (
+              <TouchableOpacity style={styles.addPostButton} onPress={() => router.push('/post')}>
+                <Ionicons name="add-circle-outline" size={24} color="black" />
+              </TouchableOpacity>
+          {username ? (
+            <TouchableOpacity style={styles.profileButton} onPress={toggleDropdown}>
+              <Text style={styles.profileText}>{username}</Text>
+              <Ionicons name="chevron-down-outline" size={16} color="black" />
+            </TouchableOpacity>
+          ) : (
+            <>
+              <TouchableOpacity style={styles.authButton} onPress={() => router.push('/login')}>
+                <Text style={styles.authButtonText}>Login</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.authButton} onPress={() => router.push('/signup')}>
+                <Text style={styles.authButtonText}>Sign Up</Text>
+              </TouchableOpacity>
+            </>
+          )}
+          {dropdownVisible && username && (
             <View style={styles.dropdown}>
-              <TouchableOpacity style={styles.dropdownOption} onPress={()=> router.push('/Profile')}>
+              <TouchableOpacity style={styles.dropdownOption} onPress={() => router.push('/Profile')}>
                 <Text style={styles.dropdownText}>Profile</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.dropdownOption} onPress={handleLogout}>
@@ -143,6 +157,18 @@ const styles = StyleSheet.create({
       profileText: {
         fontSize: 16*1.2,
         marginRight: 4,
+      },
+      authButton: {
+        marginHorizontal: 8,
+        paddingVertical: 5,
+        paddingHorizontal: 10,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 8,
+      },
+      authButtonText: {
+        fontSize: 16,
+        color: 'black',
       },
       dropdown: {
         position: 'absolute',
