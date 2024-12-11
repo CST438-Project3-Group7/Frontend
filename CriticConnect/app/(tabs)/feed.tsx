@@ -243,21 +243,18 @@ const Feed = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#f8f9fa',
   },
   content: {
     flex: 1,
     padding: 20,
   },
   sortContainer: {
-    flex:1,
-    marginBottom: 16,
-  },
-  postsContainer: {
-    width: '100%',
-  },
-  post: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     backgroundColor: '#fff',
+    padding: 12,
     borderRadius: 8,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -265,60 +262,73 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 3,
     marginBottom: 16,
-    padding: 16,
+  },
+  postsContainer: {
+    width: '100%',
+  },
+  post: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 4,
+    marginBottom: 16,
+    padding: 20,
   },
   postContent: {
-    flexDirection: 'row',
+    flexDirection: 'column',
   },
   postContentText: {
     fontSize: 14,
-    color: 'black',
+    color: '#495057',
     marginTop: 8,
     marginBottom: 8,
-    lineHeight: 20,
-  },
-  voteContainer: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    marginRight: 16,
-  },
-  iconButton: {
-    padding: 8,
-  },
-  voteCount: {
-    fontSize: 12,
-    fontWeight: 'bold',
+    lineHeight: 22,
   },
   postDetails: {
     flex: 1,
   },
   postMeta: {
-    fontSize: 12,
-    color: 'gray',
-    marginBottom: 4,
+    fontSize: 13,
+    color: '#6c757d',
+    marginBottom: 8,
   },
   postTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 8,
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#343a40',
+    marginBottom: 10,
   },
   postActions: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 8,
+    marginTop: 12,
+    justifyContent: 'space-between',
   },
   actionButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginRight: 16,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+    backgroundColor: '#e9ecef',
+    marginRight: 8,
   },
   actionText: {
     fontSize: 12,
-    color: 'gray',
-    marginLeft: 4,
+    color: '#495057',
+    marginLeft: 6,
   },
   likedButton: {
-    borderColor: 'blue',
+    backgroundColor: '#d1e7ff',
+  },
+  noPosts: {
+    fontSize: 16,
+    color: '#6c757d',
+    textAlign: 'center',
+    marginTop: 20,
   },
 });
 
