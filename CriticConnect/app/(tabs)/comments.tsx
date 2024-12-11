@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Modal, TextInput, Button, TouchableOpacity, Pressable } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Modal, TextInput, Button, TouchableOpacity, Pressable,Platform } from 'react-native';
 import { useLocalSearchParams, useFocusEffect, router } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import WebNavBar from './WebNavBar';
+import PhoneNavBar from './PhoneNavBar';
 
 const Comments = () => {
   const { post } = useLocalSearchParams(); // Retrieve postId from query string
@@ -100,6 +102,11 @@ const Comments = () => {
 
   return (
     <View style={{ flex: 1 }}>
+      {Platform.OS === 'web' ? (
+      <WebNavBar username={user?.username} />
+      ) : (
+      <PhoneNavBar username={user?.username} />
+      )}
      <Pressable onPress={() => router.push("/feed")} style={styles.backButton}>
         <Text style={styles.backButtonText}>Back</Text>
     </Pressable>

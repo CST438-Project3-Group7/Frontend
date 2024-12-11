@@ -304,17 +304,12 @@ const Profile = () => {
                       <Ionicons name="thumbs-down-outline" size={16} color="gray" />
                       <Text style={styles.actionText}>Dislike amount</Text>
                     </TouchableOpacity> */}
-                    <TouchableOpacity style={styles.actionButton}>
+                    <TouchableOpacity style={styles.actionButton}
+                      onPress={() => {
+                        router.push(`/comments?post=${post.id}`);
+                      }}>
                       <Ionicons name="chatbubble-outline" size={16} color="gray" />
                       <Text style={styles.actionText}>{post.comments} Comments</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.actionButton}>
-                      <Ionicons name="share-outline" size={16} color="gray" />
-                      <Text style={styles.actionText}>Share</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.actionButton}>
-                      <Ionicons name="bookmark-outline" size={16} color="gray" />
-                      <Text style={styles.actionText}>Save</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -406,7 +401,7 @@ const Profile = () => {
                 />
               </View>
               <View style={styles.deleteAccButtonContainer}>
-                <TouchableOpacity style={styles.deleteAccButton} onPress={() => router.push('/feed')}>
+                <TouchableOpacity style={styles.deleteAccButton} onPress={() => { setIsModalVisible(false); setDeleteAccPrompt(false); }}>
                   <Text style={styles.deleteAccButtonText}>Cancel</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.deleteAccButton} onPress={() => handleDeleteAcc(user)}>

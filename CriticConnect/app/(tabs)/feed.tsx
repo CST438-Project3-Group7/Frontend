@@ -235,14 +235,14 @@ const Feed = () => {
                       <Ionicons name="chatbubble-outline" size={16} color="gray" />
                       <Text style={styles.actionText}>{post.comments} Comments</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.actionButton}>
+                    {/* <TouchableOpacity style={styles.actionButton}>
                       <Ionicons name="share-outline" size={16} color="gray" />
                       <Text style={styles.actionText}>Share</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.actionButton}>
                       <Ionicons name="bookmark-outline" size={16} color="gray" />
                       <Text style={styles.actionText}>Save</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                   </View>
                 </View>
               </View>

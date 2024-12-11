@@ -32,26 +32,34 @@ const WebNavBar = ({username}) => {
                 <TouchableOpacity style={[styles.logoContainer, activeCategory === 'feed' && styles.logoContainer]} onPress={() => router.push('/feed')}>
                     <Text style={styles.logoText}>CriticConnect</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.catButton, activeCategory === 'Games' && styles.activeCatButton]} onPress={() => setActiveCategory('Games')}>
-                    <Text style={styles.catButtonText}>Game</Text>
+                <TouchableOpacity style={[styles.catButton, activeCategory === 'Video_Game' && styles.activeCatButton]} onPress={() => setActiveCategory('Video_Game')}>
+                    <Text style={styles.catButtonText}>Video Games</Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
                     style={[styles.catButton, activeCategory === 'Film' && styles.activeCatButton]} 
                     onPress={() => setActiveCategory('Film')}>
-                    <Text style={styles.catButtonText}>Film</Text>
+                    <Text style={styles.catButtonText}>Films</Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
                     style={[styles.catButton, activeCategory === 'Music' && styles.activeCatButton]} 
                     onPress={() => setActiveCategory('Music')}>
-                    <Text style={styles.catButtonText}>Book</Text>
+                    <Text style={styles.catButtonText}>Music</Text>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                    style={[styles.catButton, activeCategory === 'Book' && styles.activeCatButton]} 
+                    onPress={() => setActiveCategory('Book')}>
+                    <Text style={styles.catButtonText}>Books</Text>
                 </TouchableOpacity>
             </View>
-            <View style={styles.searchContainer}>
+            {/* <View style={styles.searchContainer}>
                 <TextInput style={styles.searchInput} placeholder="Search CriticConnect"/>
-            </View>
-            <View style={styles.navContainer}>
-              <TouchableOpacity style={styles.addPostButton} onPress={() => router.push('/post')}>
+            </View> */}
+            <View style={[styles.navContainer, styles.rightAlignedNavContainer]}>
+              <TouchableOpacity style={styles.actionButton} onPress={() => router.push('/post')}>
                 <Ionicons name="add-circle-outline" size={24} color="black" />
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.actionButton} onPress={() => router.push('/favorites')}>
+                <Ionicons name="star-outline" size={24} color="black" />
               </TouchableOpacity>
           {username ? (
             <TouchableOpacity style={styles.profileButton} onPress={toggleDropdown}>
@@ -108,6 +116,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: 'green',
         marginLeft: 8,
+        paddingRight: 20,
       },
       searchContainer: {
         flex: 1,
@@ -125,6 +134,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginLeft: 16,
         position: 'relative',
+      },
+      rightAlignedNavContainer: {
+        justifyContent: 'flex-end',
+        flex: 1,
+      },
+      actionButton: {
+        marginHorizontal: 8,
       },
       catButton: {
         marginHorizontal: 8,

@@ -17,23 +17,23 @@ const TabLayout = () => {
       <Tabs.Screen 
       name="home" 
       options={{ 
-        headerShown: false, 
-        href: null,
-        tabBarIcon: ({ color, size }) => (
-        <Ionicons name="home-outline" color={color} size={size} />
-        ),
+      headerShown: false, 
+      href: null,
+      tabBarIcon: ({ color, size }) => (
+      <Ionicons name="home-outline" color={color} size={size} />
+      ),
       }} 
       />
       <Tabs.Screen name="login" options={{ headerShown: false, href: null }} />
       <Tabs.Screen name="signup" options={{ headerShown: false, href: null }} />
       <Tabs.Screen
-        name="feed"
-        options={{
-          headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="list-outline" color={color} size={size} />
-          ),
-        }}
+      name="feed"
+      options={{
+        headerShown: false,
+        tabBarIcon: ({ color, size }) => (
+        <Ionicons name="list-outline" color={color} size={size} />
+        ),
+      }}
       />
       <Tabs.Screen name="Profile" options={{ headerShown: false, href: null }} />
       <Tabs.Screen name="WebNavBar" options={{ href: null }} />
@@ -47,7 +47,15 @@ const TabLayout = () => {
       ),
       }}
       />
-      <Tabs.Screen name="favorites" options={{ headerShown: false }} />
+      <Tabs.Screen 
+      name="favorites" 
+      options={{ 
+        headerShown: false,
+        tabBarIcon: ({ color, size }) => (
+        <Ionicons name="star-outline" color={color} size={size} />
+        ),
+      }} 
+      />
       <Tabs.Screen name="comments" options={{ href: null, headerShown: false }} />
     </Tabs>
   );

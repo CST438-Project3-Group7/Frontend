@@ -1,9 +1,16 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet,Platform } from 'react-native';
+import WebNavBar from './WebNavBar';
+import PhoneNavBar from './PhoneNavBar';
+
+interface User {
+  username: string;
+}
 
 const SelectFavorites = () => {
   const [favorites, setFavorites] = useState([]);
+  const [user, setUser] = useState<User | null>(null);
 
   // Function to fetch user's current favorite topics from the favorites table
   const fetchUserFavorites = async () => {
@@ -85,9 +92,41 @@ const SelectFavorites = () => {
       console.error("Error submitting favorites:", error);
     }
   };
+  const fetchUserData = async () => {
+    try {
+      // Get userId from AsyncStorage
+      const userId = await AsyncStorage.getItem('userId');
 
+      if (!userId) {
+        console.error("No user ID found in AsyncStorage");
+        setUser(null);
+        return;
+      }
+
+      // Fetch user data by ID
+      const response = await fetch(`https://criticconnect-386d21b2b7d1.herokuapp.com/api/users/${userId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        mode: 'cors',
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error fetching user data: ${response.status}`);
+      }
+
+      const userData = await response.json();
+
+      console.log("User data fetched:", userData);
+      setUser(userData);
+    } catch (error) {
+      console.error("Error retrieving user data:", error);
+    }
+  };
   // Fetch the user's favorites when the component mounts
   useEffect(() => {
+    fetchUserData();
       fetchUserFavorites();
 
   }, []);
@@ -95,6 +134,12 @@ const SelectFavorites = () => {
 
 
   return (
+    <View>
+      {Platform.OS === 'web' ? (
+      <WebNavBar username={user?.username} />
+      ) : (
+      <PhoneNavBar username={user?.username} />
+      )}
     <View style={styles.container}>
       <Text style={styles.header}>Select your favorite topics here!</Text>
 
@@ -121,6 +166,7 @@ const SelectFavorites = () => {
       <TouchableOpacity style={styles.submitButton} onPress={submitFavorites}>
         <Text style={styles.buttonText}>Submit Favorites</Text>
       </TouchableOpacity>
+    </View>
     </View>
   );
 };

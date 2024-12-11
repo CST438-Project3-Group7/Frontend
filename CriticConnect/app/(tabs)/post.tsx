@@ -10,10 +10,13 @@ import {
   ScrollView,
   Alert,
   TouchableOpacity,
+  Platform,
 } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router, useFocusEffect } from "expo-router";
 import Rating from "@/components/Rating";
+import WebNavBar from './WebNavBar';
+import PhoneNavBar from './PhoneNavBar';
 
 interface User {
   userId: number;
@@ -58,8 +61,7 @@ const PostForm: React.FC = () => {
     comments: [],
     datetime: new Date().toISOString(),
   });
-
-
+  const [user, setUser] = useState<User | null>(null);
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [newSubject, setNewSubject] = useState<Subject>({
     title: "",
@@ -76,6 +78,7 @@ const PostForm: React.FC = () => {
       if (!userId) {
         console.error("No user ID found in AsyncStorage");
         Alert.alert("Error", "User not found.");
+        setUser(null);
         return;
       }
 
@@ -95,6 +98,7 @@ const PostForm: React.FC = () => {
         ...prevPost,
         user: userData,
       }));
+      setUser(userData);
     } catch (error) {
       console.error("Error retrieving user data:", error);
       Alert.alert("Error", "Failed to fetch user data.");
@@ -222,6 +226,12 @@ const PostForm: React.FC = () => {
   );
 
   return (
+    <View>
+      {Platform.OS === 'web' ? (
+      <WebNavBar username={user?.username} />
+      ) : (
+      <PhoneNavBar username={user?.username} />
+      )}
     <ScrollView style={styles.container}>
       <Text style={styles.header}>Create Post</Text>
       <View style={styles.formGroup}>
@@ -316,6 +326,7 @@ const PostForm: React.FC = () => {
         </Modal>
       )}
     </ScrollView>
+    </View>
   );
 };
 
