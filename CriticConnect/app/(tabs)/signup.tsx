@@ -83,9 +83,17 @@ const SignUp = () => {
       // error handler
     }
   };
+  const checkAlreadyLoggedIn = async () => {
+    let user = await AsyncStorage.getItem("userId");
+    console.log("local storage currently has: ", JSON.parse(user));
+    if(user)
+    {
+      router.push('/feed');
+    }
+  }
 
   React.useEffect(() => {
-
+    checkAlreadyLoggedIn();
     handleGoogleSignIn();
   }, [response]);
   
@@ -245,10 +253,10 @@ const SignUp = () => {
           <Text>logout any async storage user</Text>
         </TouchableOpacity> */}
         {/* Google Button */}
-        {Component}
+        {/* {Component}
         <View style={styles.link}>
           <Text>or</Text>
-        </View>
+        </View> */}
         <View style={styles.link}>
           <TouchableOpacity style={styles.guestButton} onPress={() => router.push('/feed')}>
             <Text style={styles.guestButtonText}>Continue as Guest</Text>

@@ -29,7 +29,7 @@ const WebNavBar = ({username}) => {
         <View style={styles.header}>
           <View style={styles.headerContent}>
             <View style={styles.navContainer}>
-                <TouchableOpacity style={[styles.logoContainer, activeCategory === 'feed' && styles.logoContainer]} onPress={() => router.push('/feed')}>
+                <TouchableOpacity style={[styles.logoContainer, activeCategory === 'feed' && styles.logoContainer]} onPress={() => { router.push('/feed'); setActiveCategory('feed'); }}>
                     <Text style={styles.logoText}>CriticConnect</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={[styles.catButton, activeCategory === 'Video_Game' && styles.activeCatButton]} onPress={() => setActiveCategory('Video_Game')}>
@@ -56,10 +56,10 @@ const WebNavBar = ({username}) => {
             </View> */}
             <View style={[styles.navContainer, styles.rightAlignedNavContainer]}>
               <TouchableOpacity style={styles.actionButton} onPress={() => router.push('/post')}>
-                <Ionicons name="add-circle-outline" size={24} color="black" />
+                <Ionicons name="add-circle-outline" size={30} color="black" />
               </TouchableOpacity>
               <TouchableOpacity style={styles.actionButton} onPress={() => router.push('/favorites')}>
-                <Ionicons name="star-outline" size={24} color="black" />
+                <Ionicons name="star-outline" size={30} color="black" />
               </TouchableOpacity>
           {username ? (
             <TouchableOpacity style={styles.profileButton} onPress={toggleDropdown}>

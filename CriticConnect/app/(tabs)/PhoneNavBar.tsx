@@ -49,11 +49,11 @@ const PhoneNavBar = ({ username }) => {
                 <TouchableOpacity
                   style={styles.dropdownOption}
                   onPress={() => {
-                    setActiveCategory('Games');
+                    setActiveCategory('Video_Games');
                     setCategoryDropdownVisible(false);
                   }}
                 >
-                  <Text style={styles.dropdownText}>Games</Text>
+                  <Text style={styles.dropdownText}>Video Games</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.dropdownOption}
@@ -62,7 +62,16 @@ const PhoneNavBar = ({ username }) => {
                     setCategoryDropdownVisible(false);
                   }}
                 >
-                  <Text style={styles.dropdownText}>Film</Text>
+                  <Text style={styles.dropdownText}>Films</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.dropdownOption}
+                  onPress={() => {
+                    setActiveCategory('Music');
+                    setCategoryDropdownVisible(false);
+                  }}
+                >
+                  <Text style={styles.dropdownText}>Music</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.dropdownOption}

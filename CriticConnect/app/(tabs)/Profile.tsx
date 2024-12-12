@@ -401,10 +401,10 @@ const Profile = () => {
                 />
               </View>
               <View style={styles.deleteAccButtonContainer}>
-                <TouchableOpacity style={styles.deleteAccButton} onPress={() => { setIsModalVisible(false); setDeleteAccPrompt(false); }}>
+                <TouchableOpacity style={styles.deleteAccButton1} onPress={() => { setIsModalVisible(false); setDeleteAccPrompt(false); }}>
                   <Text style={styles.deleteAccButtonText}>Cancel</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.deleteAccButton} onPress={() => handleDeleteAcc(user)}>
+                <TouchableOpacity style={styles.deleteAccButton2} onPress={() => handleDeleteAcc(user)}>
                   <Text style={styles.deleteAccButtonText}>Confirm</Text>
                 </TouchableOpacity>
               </View>
@@ -421,124 +421,112 @@ const Profile = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#f7f7f7',
   },
   content: {
     flex: 1,
-    padding: 20,
-  },
-  User: {
-    width: '100%',
-    shadowColor: 'blue',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 10,
-    shadowRadius: 20,
-    elevation: 3,
-    padding: 15,
-    marginBottom: 20,
+    paddingHorizontal: 40,
+    paddingVertical: 20,
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    fontSize: 28,
+    fontWeight: '700',
+    color: '#333',
+    textAlign: 'center',
     marginBottom: 20,
+  },
+  horizontalLine: {
+    height: 2,
+    backgroundColor: '#ddd',
+    marginVertical: 20,
+  },
+  profileActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#007bff',
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 15,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 4,
+  },
+  editProfileButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginRight: 8,
   },
 sortContainer: {
     position: 'relative',
     zIndex: 1,
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    justifyContent: 'flex-end', // Align to the right
-    marginTop: 15,
-    marginBottom: 15,
+    padding: 15,
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 2,
+    marginBottom: 20,
   },
   sortButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 10,
-    backgroundColor: '#f1f1f1',
-    borderRadius: 8,
   },
-  sortButtonText: {
+  sortText: {
     fontSize: 16,
-    marginRight: 8,
+    color: '#555',
+    marginRight: 10,
   },
-  dropdown: {
-    position: 'absolute',
-    top: 50,
-    right: 0, 
-    backgroundColor: '#fff',
+  sortDropDown: {
+    height: 40,
+    width: 150,
+    borderRadius: 8,
     borderWidth: 1,
     borderColor: '#ccc',
-    borderRadius: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 3,
+    paddingHorizontal: 10,
+    backgroundColor: '#f9f9f9',
   },
-  dropdownOption: {
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-  },
-  dropdownText: {
-    fontSize: 16,
-  },
-  horizontalLine: {
-    height: 1,
-    backgroundColor: 'black',
-    width: '100%',
-    marginVertical: 20,
-  },
-  postsContainer: {
-    width: '100%',
+  postContainer: {
+    marginTop: 20,
   },
   post: {
     backgroundColor: '#fff',
-    borderRadius: 8,
-    borderColor: 'black',
-    borderWidth: 2,
+    borderRadius: 10,
+    padding: 20,
+    marginBottom: 15,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 3,
-    marginBottom: 16,
-    padding: 16,
   },
   postContent: {
     flexDirection: 'row',
   },
   postContentText: {
     fontSize: 14,
-    color: 'black',
+    color: '#333',
     marginTop: 8,
     marginBottom: 8,
     lineHeight: 20,
   },
-  voteContainer: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    marginRight: 16,
-  },
-  iconButton: {
-    padding: 8,
-  },
-  voteCount: {
-    fontSize: 12,
-    fontWeight: 'bold',
-  },
-  postDetails: {
-    flex: 1,
-  },
   postMeta: {
     fontSize: 12,
-    color: 'gray',
-    marginBottom: 4,
+    color: '#777',
+    marginBottom: 8,
   },
   postTitle: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
+    color: '#222',
     marginBottom: 8,
   },
   postActions: {
@@ -552,85 +540,72 @@ sortContainer: {
     marginRight: 16,
   },
   actionText: {
-    fontSize: 12,
-    color: 'gray',
+    fontSize: 14,
+    color: '#555',
     marginLeft: 4,
   },
-  deleteForm: {
-    marginBottom: 15,
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    width: '80%',
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 5,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#333',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  modalForm: {
+    marginBottom: 20,
   },
   label: {
     fontSize: 16,
-    color: '#333',
-    marginBottom: 5,
+    fontWeight: '500',
+    color: '#555',
+    marginBottom: 8,
   },
   input: {
     height: 40,
-    width: '45%',
-    borderColor: '#ccc',
     borderWidth: 1,
-    borderRadius: 5,
+    borderColor: '#ccc',
+    borderRadius: 8,
     paddingHorizontal: 10,
-    backgroundColor: '#fff',
+    backgroundColor: '#f9f9f9',
+    marginBottom: 15,
+    fontSize: 16,
   },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 20,
-  },
-  buttonSpacing: {
-    marginRight: 10, // Add space between the buttons
   },
   saveButton: {
     flex: 1,
-    backgroundColor: 'green',
-    paddingVertical: 10,
+    backgroundColor: '#28a745',
+    paddingVertical: 12,
     borderRadius: 5,
     alignItems: 'center',
-    marginTop: 20,
-    width: 150,
-    height: 50,
-    marginLeft: 10,
+    marginHorizontal: 5,
   },
   cancelButton: {
     flex: 1,
-    backgroundColor: 'red',
-    paddingVertical: 10,
+    backgroundColor: '#dc3545',
+    paddingVertical: 12,
     borderRadius: 5,
     alignItems: 'center',
-    marginTop: 20,
-    width: 150,
-    height: 50,
-    marginRight: 10,
-  },
-  saveButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  cancelButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  profileActions: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 10,
-    borderRadius: 5,
-    borderColor: 'black',
-    borderWidth: 2,
-    width: 150,
-    height: 50,
-    marginBottom: 5,
-  },
-  editProfileButtonText: {
-    fontSize: 16,
-    color: '#333',
-  },
-  editProfileIcon: {
-    flex: 0,
-    marginLeft: 10,
+    marginHorizontal: 5,
   },
   deleteAccContainer: {
     alignItems: 'center',
@@ -668,9 +643,17 @@ sortContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  deleteAccButton: {
+  deleteAccButton1: {
     flex: 1,
-    backgroundColor: 'red',
+    backgroundColor: '#dc3545',
+    paddingVertical: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginHorizontal: 10,
+  },
+  deleteAccButton2: {
+    flex: 1,
+    backgroundColor: '#28a745',
     paddingVertical: 10,
     borderRadius: 5,
     alignItems: 'center',
@@ -680,32 +663,6 @@ sortContainer: {
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
-  },
-  sortText: {
-    fontSize: 16,
-    marginRight: 8,
-  },
-  
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalContent: {
-    width: '40%',
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 20,
-    alignItems: 'left',
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginTop: 20,
-  },
-  modalForm: {
-    alignItems: 'center',
   },
 });
 
