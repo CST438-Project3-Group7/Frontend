@@ -32,7 +32,7 @@ const WebNavBar = ({username}) => {
                 <TouchableOpacity style={[styles.logoContainer, activeCategory === 'feed' && styles.logoContainer]} onPress={() => { router.push('/feed'); setActiveCategory('feed'); }}>
                     <Text style={styles.logoText}>CriticConnect</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.catButton, activeCategory === 'Video_Game' && styles.activeCatButton]} onPress={() => setActiveCategory('Video_Game')}>
+                {/* <TouchableOpacity style={[styles.catButton, activeCategory === 'Video_Game' && styles.activeCatButton]} onPress={() => setActiveCategory('Video_Game')}>
                     <Text style={styles.catButtonText}>Video Games</Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
@@ -49,7 +49,7 @@ const WebNavBar = ({username}) => {
                     style={[styles.catButton, activeCategory === 'Book' && styles.activeCatButton]} 
                     onPress={() => setActiveCategory('Book')}>
                     <Text style={styles.catButtonText}>Books</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </View>
             {/* <View style={styles.searchContainer}>
                 <TextInput style={styles.searchInput} placeholder="Search CriticConnect"/>

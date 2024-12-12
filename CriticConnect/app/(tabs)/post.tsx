@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   Platform,
 } from "react-native";
+import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router, useFocusEffect } from "expo-router";
 import Rating from "@/components/Rating";

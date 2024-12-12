@@ -233,6 +233,8 @@ const Profile = () => {
       }
   
       alert('Account deleted successfully');
+      setIsModalVisible(false);
+      setDeleteAccPrompt(false);
       router.push('/login');
     } catch (error) {
       console.error('Error deleting account:', error);
@@ -258,27 +260,21 @@ const Profile = () => {
             </TouchableOpacity>
         <View style={styles.horizontalLine}/>
         <View style={styles.sortContainer}>
-            <TouchableOpacity onPress={() => setDropdownVisible(!dropdownVisible)} style={styles.sortButton}>
-              <Text style={styles.sortButtonText}>Sort by: {selectedSort}</Text>
-              <Ionicons name="chevron-down-outline" size={16} color="black" />
-            </TouchableOpacity>
-            {dropdownVisible && (
-              <View style={styles.dropdown}>
-                <TouchableOpacity style={styles.dropdownOption} onPress={() => sortPosts('newest')}>
-                  <Text style={styles.dropdownText}>Newest</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.dropdownOption} onPress={() => sortPosts('oldest')}>
-                  <Text style={styles.dropdownText}>Oldest</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.dropdownOption} onPress={() => sortPosts('most-liked')}>
-                  <Text style={styles.dropdownText}>Most Liked</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.dropdownOption} onPress={() => sortPosts('rating')}>
-                  <Text style={styles.dropdownText}>Rating</Text>
-                </TouchableOpacity>
-              </View>
-            )}
-          </View>
+          <Text style={styles.title}>Posts</Text>
+          <View style={styles.sortWrapper}>
+            <Text style={styles.sortText}>Sort by</Text>
+            <Picker
+              selectedValue={selectedSort}
+              style={styles.sortDropDown}
+              onValueChange={(itemValue) => sortPosts(itemValue)}
+            >
+              <Picker.Item label="Newest" value="newest" />
+              <Picker.Item label="Oldest" value="oldest" />
+              <Picker.Item label="Most Liked" value="most-liked" />
+              <Picker.Item label="Rating" value="rating" />
+            </Picker>
+            </View>
+        </View>
         <View style={styles.postContainer}>
         {posts.length === 0 ? (
           <Text>No posts available</Text>
